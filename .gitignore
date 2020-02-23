@@ -62,3 +62,4 @@ example/.deps
 example/.dirstamp
 example/.libs
 example/*.o
+example/ignitech_example

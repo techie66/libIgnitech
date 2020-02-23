@@ -1,5 +1,5 @@
 #include "error_handling.h"
-
+e_lvl LEVEL_DEBUG = WARN;
 void error_message(e_lvl err_lvl, char const *fmt, ...) {
 
 
@@ -12,34 +12,25 @@ void error_message(e_lvl err_lvl, char const *fmt, ...) {
 			++fmt;	
 				if (*fmt == 'd') {
 					int i = va_arg(args, int);
-					printf( "%d", i ) ;
+					fprintf(stderr, "%d", i ) ;
 				} else if (*fmt == 'c') {
 					int c = va_arg(args, int);
-					printf( "%c", (char)c ) ;
+					fprintf(stderr, "%c", (char)c ) ;
 				} else if (*fmt == 'f') {
 					double d = va_arg(args, double);
-					printf( "%f", d ) ;
+					fprintf(stderr, "%f", d ) ;
 				} else if (*fmt == 's') {
 					const char *str = va_arg(args, const char*);
-					printf( "%s",str );
+					fprintf(stderr, "%s",str );
 				}
 			}
 			else {
-				printf( "%c",(char)*fmt);
+				fprintf(stderr, "%c",(char)*fmt);
 			}
 			++fmt;
 		}
-		printf("\n");
+		fprintf(stderr,"\n");
 	}
 	va_end(args);
 }
 
-void signalHandler( int signum ) {
-	error_message(INFO, "Interrupt signal %d received", signum);
-	time_to_quit = true;
-
-	// cleanup and close up stuff here  
-	// terminate program  
-
-	//exit(signum); 
-}

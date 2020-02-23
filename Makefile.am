@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libignitech.la
-libignitech_la_SOURCES = ignitech.cpp
-include_HEADERS = ignitech.h
+libignitech_la_SOURCES = ignitech.cpp serial.cpp
+include_HEADERS = ignitech.h serial.h
 SUBDIRS = . example
 examples:
 	$(MAKE) $(AM_MAKEFLAGS) -C example example
