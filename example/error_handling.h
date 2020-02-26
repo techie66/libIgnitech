@@ -3,10 +3,11 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <csignal>
+#include <signal.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-enum e_lvl{NONE,ERROR,WARN,INFO,DEBUG};
+typedef enum e_lvl{NONE,ERROR,WARN,INFO,DEBUG} e_lvl;
 extern e_lvl LEVEL_DEBUG;
 
 void error_message(e_lvl err_lvl,char const *fmt, ...);

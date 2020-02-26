@@ -48,7 +48,7 @@ int main() {
 					error_message(DEBUG,"Read %d Bytes from tty, sending response.", read_bytes);
 				}
 				if (read_bytes == 102) {
-					write(1,response,102);
+					int write_bytes = write(1,response,102);
 				}
 			}
 		}
