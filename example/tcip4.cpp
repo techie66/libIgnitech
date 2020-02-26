@@ -2,7 +2,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
-#include "../error_handling.h"
+#include "error_handling.h"
 
 
 volatile sig_atomic_t time_to_quit;
