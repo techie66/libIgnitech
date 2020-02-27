@@ -66,3 +66,6 @@ example/.dirstamp
 example/.libs
 example/*.o
 example/ignitech_example
+
+# extra
+example/virtual-tty

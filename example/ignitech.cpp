@@ -7,8 +7,10 @@
 int main() {
 	IGNITECH bike ("./virtual-tty");
 	ignitech_t bike_status;
+	int read_status;
 	printf("Example passing our own ignitech_t struct.\n");
-	if (bike.read_sync(bike_status) < 0 ) {
+	read_status = bike.read_sync(bike_status);
+	if (read_status < 0 ) {
 	    printf("Error");
 	}
 	else {
@@ -19,7 +21,8 @@ int main() {
 	}
 
 	printf("Example using internal ignitech_t struct.\n");
-	if (bike.read_sync() < 0 ) {
+	read_status = bike.read_sync();
+	if (read_status < 0 ) {
 	    printf("Error");
 	}
 	else {

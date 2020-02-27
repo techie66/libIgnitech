@@ -31,7 +31,7 @@ int IGNITECH::read_sync (ignitech_t& ignitech_data ) {
 			// Good !
 		}
 		else {
-			return -1;
+			return -1 * b_read;
 		}
 	}
 	else {
