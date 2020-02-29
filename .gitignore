@@ -32,7 +32,6 @@
 *.exe
 *.out
 *.app
-example/emulator.sh
 example/tcip4_emulator
 
 
