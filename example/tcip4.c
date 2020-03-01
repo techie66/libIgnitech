@@ -62,6 +62,12 @@ int main() {
 					else if (file_read_bytes < 102 ) {
 						error_message (DEBUG, "error %d : %s:: Bytes Read: %d, resetting file.", errno, strerror (errno),file_read_bytes);
 						rewind(ptr);
+						file_read_bytes = fread(w_buf,1,102,ptr);
+						if (file_read_bytes == 102) {
+							int write_bytes = write(1,w_buf,102);
+							error_message (DEBUG, "Bytes Sent: %d", write_bytes);
+						}
+
 					}
 				}
 			}
