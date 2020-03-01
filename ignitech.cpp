@@ -18,20 +18,40 @@ void IGNITECH::initialize() {
 */
 
 int IGNITECH::read_sync (ignitech_t& ignitech_data ) {
-	unsigned char buf[102];
+	unsigned char buf[IGNITECH_PACKET_SIZE];
+	size_t		total_read = 0;
+	size_t		total_left = IGNITECH_PACKET_SIZE;
 
+	set_blocking (file_descriptor, 1);                // set blocking
 	// Query controller for status
-	int b_written = write(file_descriptor,IGNITECH_QUERY,102);
+	size_t b_written = write(file_descriptor,IGNITECH_QUERY,102);
 	// check for success...
 	if (b_written == 102) {
 		// Good !
 		// read response data / check validity
-		int b_read = read(file_descriptor,buf,102);
-		if (b_read == 102) {
-			// Good !
+		while ( buf[0] != 0xb0 ) {
+			size_t b_read = read(file_descriptor,buf,1);
+			if (b_read <= 0 ) {
+				// Failure or done
+				if (b_read < 0)
+					perror("read");
+				return -1;
+			}
 		}
-		else {
-			return -1 * b_read;
+		total_read += 1;
+		total_left -= 1;
+		while ( total_left > 0 ) {
+			size_t b_read = read(file_descriptor,&buf[total_read],total_left);
+			if (b_read <= 0 ) {
+				// Failure or done
+				if (b_read < 0)
+					perror("read");
+				return -1;
+			}
+			else {
+				total_read += b_read;
+				total_left -= b_read;
+			}
 		}
 	}
 	else {
@@ -68,7 +88,7 @@ IGNITECH::IGNITECH( const char* file) {
 	}
 
 	// Set interface parameters for front controls
-	set_interface_attribs (fd, B19200, 0);  // set speed to 19,200 bps, 8n1 (no parity)
+	set_interface_attribs (fd, B57600, 0);  // set speed to 19,200 bps, 8n1 (no parity)
 	set_blocking (fd, 0);                // set no blocking
 
 	file_descriptor = fd;

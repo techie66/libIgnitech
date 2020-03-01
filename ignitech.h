@@ -19,7 +19,7 @@ API for libIgnitech
 #include "serial.h"
 
 #define IGNITECH_BOGUS 0x3000
-
+#define IGNITECH_PACKET_SIZE 102
 // Endianness Dependant
 //  Multi-byte comparisons need correct order
 #ifdef WORDS_BIGENDIAN
