@@ -32,7 +32,12 @@ API for libIgnitech
 
 #endif /* WORDS_BIGENDIAN */
 
-extern const unsigned char IGNITECH_QUERY[];
+extern unsigned char const IGNITECH_QUERY[];
+typedef enum IGN_async_status{
+	IGN_ERR=-1,
+	IGN_SUC,
+	IGN_AGAIN
+} IGN_async_status;
 
 struct ignitech_t{
 	uint16_t	rpm;
@@ -45,17 +50,22 @@ class IGNITECH {
 	public:
 		int read_sync( ignitech_t& ignitech_data );
 		int read_sync( );
+		IGN_async_status read_async( ignitech_t& ignitech_data );
+		IGN_async_status read_async( );
 		int get_rpm();
 		int get_map_kpa();
 		int get_map_mV();
 		int get_battery_mV();
-		IGNITECH( const char* file );
+		IGNITECH( char const *file );
 		IGNITECH( int fd );
 	private:
 		void initialize();
+		int open_device();
+		int query_device();
 		int file_descriptor;
 		ignitech_t ignition;
 		bool isArduino;
+		char const *device;
 };
 
 
