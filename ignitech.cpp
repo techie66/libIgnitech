@@ -31,6 +31,8 @@ int IGNITECH::read_sync (ignitech_t& ignitech_data ) {
 */
 
 IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
+	time_t const reset_timeout = 1;
+	static time_t reset_last_read = time();
 	static unsigned char buf[IGNITECH_PACKET_SIZE];
 	static bool found_header = false;
 	static bool sent_header = false;
@@ -38,27 +40,39 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 	static size_t good_read = 0;
 	static size_t total_left = IGNITECH_PACKET_SIZE;
 
-	if ( total_read >= IGNITECH_PACKET_SIZE ) {
-	}
-
-
-	if ( file_descriptor < 0 ) {
-		total_read = 0;
-		total_left = IGNITECH_PACKET_SIZE;
-		found_header = false;
-	}
-
-	if ( total_read >= IGNITECH_PACKET_SIZE ) {
+	if ( time() > reset_last_read + reset_timeout ) {
+		// No response for timeout, reset
+		perror ( "IGNITECH::read_async: No response from controller within timeout. Resetting.");
 		total_read = 0;
 		total_left = IGNITECH_PACKET_SIZE;
 		good_read = 0;
 		found_header = false;
 		sent_header = false;
 		buf[0] = 0;
-		// TODO reset and resend query
+	}
+
+	if ( file_descriptor < 0 ) {
+		// Bad file descriptor, reset
+		total_read = 0;
+		total_left = IGNITECH_PACKET_SIZE;
+		good_read = 0;
+		found_header = false;
+		sent_header = false;
+		buf[0] = 0;
+	}
+
+	if ( total_read >= IGNITECH_PACKET_SIZE ) {
+		// Read more than expected, reset
+		total_read = 0;
+		total_left = IGNITECH_PACKET_SIZE;
+		good_read = 0;
+		found_header = false;
+		sent_header = false;
+		buf[0] = 0;
 	}
 
 	if ( !sent_header && total_read == 0 ) {
+		// On reset, or after successful reading of packet
 		if ( query_device() < 0 )
 			return IGN_ERR;
 		sent_header = true;
@@ -92,6 +106,7 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 						}
 						return IGN_AGAIN;
 					}
+					reset_last_read = time();
 					total_read += b_read;
 					sent_header = false;
 					if (buf[0] == 0xb0 ) {		// Found header
@@ -106,7 +121,6 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 	}
 	if ( found_header ) {
 		// read the rest
-		// TODO select() call
 		if ( total_left > 0 ) {
 
 			int	select_result = 0,
@@ -135,6 +149,7 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 						return IGN_AGAIN;
 					}
 					else {
+						reset_last_read = time();
 						good_read += b_read;
 						total_read += b_read;
 						total_left -= b_read;
