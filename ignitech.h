@@ -16,6 +16,7 @@ API for libIgnitech
 #include <errno.h>
 #include <string.h>
 #include <stddef.h>
+#include <time.h>
 #include "serial.h"
 
 #define IGNITECH_BOGUS 0x3000
