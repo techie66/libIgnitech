@@ -1,8 +1,10 @@
 # This line sent to the TCIP4 (102 bytes hex) will get it to respond with status data etc...
 300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005897
+(Need to check if only sending byte 30 will illicit a response. Seems that the request specifies the data format. ie. 0x58=v88)
 
-# this line (102 bytes hex) is the response
+# this line (102 bytes hex) is the response (v88)
 # all numbers seem to be little endian encoding (ie opposite of what you'd expect)
+0/1     2/3  4/5   6/7         8/9  10/13    14/17    18/21     22/23    24   26   28  30  32  34  36  38  40  42   44   46  48  50   52   54   56   58    60   62    64
 Header  RPM  MAPmv Voltage(mV)              unk                 MAP(kpa)                                            seq #                            adv1?      adv2?
 b000    4404 010f  4d30        9c00 00001700 ce00c300 00000000  5b00     1000 4a00 0000ff00ff0000000000000000000000 0100 000000000002 00f0 f1ff ff6e 6f00  0000 6c00  0000000000000000000000000000000000000000000000000000 0300 000000000000ff00 5830
 2       2    2     2                                            2or1?                                               2?                               2          2    
@@ -13,7 +15,7 @@ b000    0000 aa10  2431        b900 00001700 00000000 00000000  6500     2c00 00
 Still haven't found: Don't know what many of them are...
 Number of programmings
 Date of programming
-version of program in ignition
+version of program in ignition <-- byte 101 v88
 dwell
 dwell opt
 servo measured
