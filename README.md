@@ -24,9 +24,9 @@ To make examples do `make examples`. You will get two files "ignitech_example_dy
 make git-clean will delete all auto generated files and leave just the files that would normally be in the git repository.
 
 # TODO
-- [] API
-- [] Checksum checking
-- [] Support for v96
+- [ ] API
+- [ ] Checksum checking
+- [ ] Support for v96
 - [x] CLI Example
 - [x] Communication setup
 - [x] querying controller
