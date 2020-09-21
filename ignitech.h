@@ -36,7 +36,6 @@ API for libIgnitech
 #include <string.h>
 #include <stddef.h>
 #include <time.h>
-#include "serial.h"
 
 #define IGNITECH_BOGUS 0x3000
 #define IGNITECH_PACKET_SIZE 102
