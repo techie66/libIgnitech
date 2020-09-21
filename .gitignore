@@ -36,7 +36,7 @@ example/tcip4_emulator
 
 
 # Autotools/libtool/gnumake Stuff
-#Makefile
+Makefile
 #Makefile.in
 #compile
 #config.guess
@@ -44,19 +44,19 @@ example/tcip4_emulator
 #depcomp
 #install-sh
 #configure
-#config.log
-#config.status
-#stamp-h1
+config.log
+config.status
+stamp-h1
 #missing
-#.deps
-#.libs
+.deps
+.libs
 #aclocal.m4
 #autom4te.cache
-#config.h
+config.h
 #config.h.in
 #config.h.in~
 #ltmain.sh
-#libtool
+libtool
 
 #example/Makefile
 #example/Makefile.in
@@ -64,8 +64,8 @@ example/tcip4_emulator
 #example/.dirstamp
 #example/.libs
 #example/*.o
-#example/ignitech_example
-#example/ignitech_example_dyn
+example/ignitech_example
+example/ignitech_example_dyn
 
 
 # extra

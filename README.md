@@ -15,13 +15,24 @@ C++ compiler
 ## Installation
 INSTALL contains modified generic GNU install instructions.
 
-Quick installation: `./autogen.sh && ./configure && make && sudo make install`
+###Quick installation: 
+	./configure && make && sudo make install
 
 This is made to be a shared library, so under Linux you may need to do `sudo ldconfig` after `sudo make install`
 
-To make examples do `make examples`. You will get two files "ignitech_example_dyn" and "ignitech_example" the dyn version links to the installed library, the other does not. In order for make examples to not fail, you probably have to run `make install' first.
+###Examples
+To make examples doi:
+	make examples
+You will get "ignitech_example".
 
-make git-clean will delete all auto generated files and leave just the files that would normally be in the git repository.
+To make a dynmically linked example:
+	cd example
+	make example_dyn 
+In order for make example_dyn to not fail, you have to run `make install' first.
+
+###Other targets
+make git-clean will delete all autotools generated files and leave just the files that would normally be in the git repository.
+make uninstall works as expected.
 
 # TODO
 - [ ] API
