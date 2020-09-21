@@ -13,9 +13,11 @@ C++ compiler
 ## Installation
 INSTALL contains modified generic GNU install instructions.
 
-```
 ### Quick installation: 
-	./configure && make && sudo make install
+```
+	./configure
+	make
+	sudo make install
 ```
 
 This is made to be a shared library, so under Linux you may need to do `sudo ldconfig` after `sudo make install`
