@@ -37,33 +37,33 @@ example/tcip4_emulator
 
 # Autotools/libtool/gnumake Stuff
 Makefile
-Makefile.in
-compile
-config.guess
-config.sub
-depcomp
-install-sh
-configure
+#Makefile.in
+#compile
+#config.guess
+#config.sub
+#depcomp
+#install-sh
+#configure
 config.log
 config.status
 stamp-h1
-missing
+#missing
 .deps
 .libs
-aclocal.m4
-autom4te.cache
+#aclocal.m4
+#autom4te.cache
 config.h
-config.h.in
-config.h.in~
-ltmain.sh
+#config.h.in
+#config.h.in~
+#ltmain.sh
 libtool
 
-example/Makefile
-example/Makefile.in
-example/.deps
-example/.dirstamp
-example/.libs
-example/*.o
+#example/Makefile
+#example/Makefile.in
+#example/.deps
+#example/.dirstamp
+#example/.libs
+#example/*.o
 example/ignitech_example
 example/ignitech_example_dyn
 

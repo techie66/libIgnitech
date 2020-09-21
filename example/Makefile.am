@@ -1,5 +1,4 @@
-bin_PROGRAMS = ignitech_example tcip4_emulator
-EXTRA_PROGRAMS =  ignitech_example_dyn
+EXTRA_PROGRAMS =  ignitech_example_dyn ignitech_example tcip4_emulator
 ignitech_example_SOURCES = ignitech.cpp
 ignitech_example_dyn_SOURCES = ignitech.cpp
 tcip4_emulator_SOURCES = tcip4.c error_handling.c
