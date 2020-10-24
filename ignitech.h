@@ -38,7 +38,15 @@ API for libIgnitech
 #include <time.h>
 
 #define IGNITECH_BOGUS 0x3000
-#define IGNITECH_PACKET_SIZE 102
+#define IGNITECH_PACKET_SIZE_V88 102
+#define IGNITECH_PACKET_SIZE_V96 152
+#define IGNITECH_VERSION_BYTE_V88 0x58
+#define IGNITECH_VERSION_BYTE_V96 0x60
+#define IGNITECH_HEADER_DATA  0xb0
+#define IGNITECH_HEADER_DIAG  0x80
+#define IGNITECH_HEADER_DATA_V88  0x00
+#define IGNITECH_HEADER_DATA_V96  0x07
+
 // Endianness Dependant
 //  Multi-byte comparisons need correct order
 #ifdef WORDS_BIGENDIAN
@@ -51,7 +59,7 @@ API for libIgnitech
 
 #endif /* WORDS_BIGENDIAN */
 
-extern unsigned char const IGNITECH_QUERY[];
+extern unsigned char const IGNITECH_QUERY_V88[];
 typedef enum IGN_async_status{
 	IGN_ERR=-1,
 	IGN_SUC,
@@ -77,14 +85,28 @@ class IGNITECH {
 		int get_battery_mV();
 		IGNITECH( char const *file );
 		IGNITECH( int fd );
+		void enable_debug();
+		void disable_debug();
+		void enable_raw_dump( char const *file );
+		void disable_raw_dump();
 	private:
 		void initialize();
+		void reset();
 		int open_device();
 		int query_device();
+		bool checksum_is_good(unsigned char *buf, int length);
+		bool packet_version_matches(unsigned char *buf, int length);
 		int file_descriptor;
 		ignitech_t ignition;
 		bool isArduino;
+		bool DEBUG_IGNITECH;
+		bool raw_dump;
+		FILE* dump_file;
 		char const *device;
+		enum version{
+			VERSION_V88,
+			VERSION_V96
+		} version;
 };
 
 
