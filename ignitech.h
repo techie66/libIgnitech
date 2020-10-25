@@ -28,6 +28,7 @@ API for libIgnitech
 #define IGNITECH_H
 
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
