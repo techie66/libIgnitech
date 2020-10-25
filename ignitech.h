@@ -46,6 +46,7 @@ API for libIgnitech
 #define IGNITECH_HEADER_DIAG  0x80
 #define IGNITECH_HEADER_DATA_V88  0x00
 #define IGNITECH_HEADER_DATA_V96  0x07
+#define IGNITECH_MAX_RESETS  5
 
 // Endianness Dependant
 //  Multi-byte comparisons need correct order
@@ -63,6 +64,7 @@ extern unsigned char const IGNITECH_QUERY_V88[];
 typedef enum IGN_async_status{
 	IGN_ERR=-1,
 	IGN_SUC,
+	IGN_BAD,
 	IGN_AGAIN
 } IGN_async_status;
 
@@ -89,24 +91,29 @@ class IGNITECH {
 		void disable_debug();
 		void enable_raw_dump( char const *file );
 		void disable_raw_dump();
+		IGN_async_status get_status();
+
 	private:
 		void initialize();
-		void reset();
+		void reset(bool force=false);
 		int open_device();
 		int query_device();
 		bool checksum_is_good(unsigned char *buf, int length);
 		bool packet_version_matches(unsigned char *buf, int length);
+		float running_map_ratio( ignitech_t& ignitech_data );
 		int file_descriptor;
 		ignitech_t ignition;
 		bool isArduino;
 		bool DEBUG_IGNITECH;
 		bool raw_dump;
 		FILE* dump_file;
+		int num_resets;
 		char const *device;
 		enum version{
 			VERSION_V88,
 			VERSION_V96
 		} version;
+		IGN_async_status status;
 };
 
 

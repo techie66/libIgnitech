@@ -1,6 +1,11 @@
 <!-- vim: syntax=Markdown -->
 # libIgnitech
 Library to read information from the Ignitech TCIP-4 ignition controller (v88).
+Currently supporting the folowing data:
+ - RPM
+ - Battery Voltage
+ - Intake Absolute Pressure ( voltage reading of sensor and converted to kpa )
+
 Ignitech S.R.O. is not affiliated with this software https://www.ignitech.cz
 
 Just saying, this would be easier for me if someone else did it. :-P
@@ -43,7 +48,7 @@ make uninstall works as expected.
 
 # TODO
 - [ ] API
-- [ ] Checksum checking
+- [x] Checksum checking
 - [ ] Support for v96
 - [x] CLI Example
 - [x] Communication setup

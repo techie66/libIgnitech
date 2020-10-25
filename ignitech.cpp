@@ -22,16 +22,24 @@
 
 unsigned char const IGNITECH_QUERY_V88[102] = {0x30,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x58,0x97};
 void IGNITECH::initialize() {
-	reset();
+	reset(true);
 	DEBUG_IGNITECH = false;
 	file_descriptor=-1;
 }
 
-void IGNITECH::reset() {
-	ignition.rpm=0;
-	ignition.battery_mV=0;
-	ignition.map_mV=0;
-	ignition.map_kpa=0;
+void IGNITECH::reset(bool force) {
+	// Build resiliency to transient failures, only actually reset after continued failure
+	if ( num_resets > IGNITECH_MAX_RESETS || force) {
+		ignition.rpm=0;
+		ignition.battery_mV=0;
+		ignition.map_mV=0;
+		ignition.map_kpa=0;
+		num_resets = 0;
+		status = IGN_ERR;
+	}
+	else {
+		num_resets++;
+	}
 }
 /*
 	Synchronously reads from the controller
@@ -136,7 +144,6 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 					reset_last_read = time(0);
 					total_read += b_read;
 					sent_header = false;
-					// TODO 
 					if (buf[0] == IGNITECH_HEADER_DATA ) {		// Found header
 						found_header = true;
 						sent_header = false;
@@ -203,11 +210,15 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 	
 	if ( packet_size - total_read == 0 ) {
 		if ( checksum_is_good(buf,packet_size) && packet_version_matches(buf,packet_size) ) {
+			status = IGN_SUC;
 			if ( version == VERSION_V88 ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
 				ignitech_data.map_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.battery_mV = buf[6] + buf[7] * 0x100u;
 				ignitech_data.map_kpa = buf[22] + buf[23] *0x100u;
+				if ( ignitech_data.map_kpa != 0 && abs( running_map_ratio(ignitech_data) - ignitech_data.map_mV/(float)ignitech_data.map_kpa ) > 2 ) {
+					status = IGN_BAD;
+				}
 			}
 			if ( version == VERSION_V96 ) {
 				/* TODO
@@ -226,7 +237,8 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 			good_read = 0;
 			found_header = false;
 			buf[0] = 0;
-			return IGN_SUC;
+			num_resets = 0;
+			return status;
 		}
 		else {
 			reset();
@@ -265,6 +277,7 @@ int IGNITECH::query_device() {
 			return -1;
 	}
 	// Query controller for status
+	// TODO separate queries for different VERSIONS
 	size_t b_written = write(file_descriptor,IGNITECH_QUERY_V88,IGNITECH_PACKET_SIZE_V88);
 	if (b_written == IGNITECH_PACKET_SIZE_V88 )// check for success
 		return 0; // Good :)
@@ -334,6 +347,12 @@ int IGNITECH::get_battery_mV() {
 	return ignition.battery_mV;
 }
 
+/*
+	Simple Getter
+*/
+IGN_async_status IGNITECH::get_status() {
+	return status;
+}
 void IGNITECH::enable_debug() {
 	DEBUG_IGNITECH = true;
 }
@@ -392,4 +411,14 @@ bool IGNITECH::packet_version_matches(unsigned char *buf, int length) {
 	}
 
 	return true;
+}
+
+
+/*
+	Keep track of running ratio of map_mV to map_kpa
+	returns ratio
+*/
+float IGNITECH::running_map_ratio( ignitech_t& ignitech_data ) {
+	// TODO actually calculate
+	return 41.9;
 }

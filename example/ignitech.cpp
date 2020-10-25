@@ -8,7 +8,8 @@ int main() {
 	IGNITECH bike ("./virtual-tty");
 	ignitech_t bike_status;
 	int read_status;
-	bike.enable_raw_dump("dump.bin");
+	//bike.enable_raw_dump("dump.bin");
+	bike.enable_debug();
 	while(1){
 	printf("Example passing our own ignitech_t struct.\n");
 	read_status = bike.read_sync(bike_status);
