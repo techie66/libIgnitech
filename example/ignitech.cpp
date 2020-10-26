@@ -6,6 +6,7 @@
 
 int main() {
 	IGNITECH bike ("./virtual-tty");
+	//IGNITECH bike ("/dev/ignitech");
 	ignitech_t bike_status;
 	int read_status;
 	//bike.enable_raw_dump("dump.bin");
