@@ -223,12 +223,11 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				}
 			}
 			if ( version == VERSION_V96 ) {
-				/* TODO
+				// TODO
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
 				ignitech_data.map_mV = buf[4] + buf[5] * 0x100u;
-				ignitech_data.battery_mV = buf[6] + buf[7] * 0x100u;
-				ignitech_data.map_kpa = buf[22] + buf[23] *0x100u;
-				*/
+				ignitech_data.map_kpa = buf[6] + buf[7] *0x100u;
+				ignitech_data.battery_mV = buf[8] + buf[9] * 0x100u;
 			}
 
 			if ( raw_dump ) {
