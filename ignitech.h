@@ -74,6 +74,16 @@ struct ignitech_t{
 	uint16_t	battery_mV;
 	uint16_t	map_mV;
 	uint16_t	map_kpa;
+	uint16_t	programmings;
+	uint16_t	advance_max_1_grad;
+	uint16_t	advance_max_2_grad;
+	uint16_t	dwell_opt_ms;
+	uint16_t	dwell_ms;
+	uint16_t	runtime_min;
+	uint16_t	message_number;
+	uint8_t	advance_1_grad;
+	uint8_t	advance_2_grad;
+	uint8_t	flags;
 };
 
 class IGNITECH {

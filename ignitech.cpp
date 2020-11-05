@@ -257,11 +257,20 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				}
 			}
 			if ( version == VERSION_V96 ) {
-				// TODO
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
 				ignitech_data.map_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.map_kpa = buf[6] + buf[7] *0x100u;
 				ignitech_data.battery_mV = buf[8] + buf[9] * 0x100u;
+				ignitech_data.programmings = buf[14] + buf[15] * 0x100u;
+				ignitech_data.advance_max_1_grad = buf[18] + buf[19] * 0x100u;
+				ignitech_data.advance_max_2_grad = buf[20] + buf[21] * 0x100u;
+				ignitech_data.dwell_opt_ms = buf[26] + buf[27] * 0x100u;
+				ignitech_data.dwell_ms = buf[28] + buf[29] * 0x100u;
+				ignitech_data.runtime_min = buf[30] + buf[31] * 0x100u;
+				ignitech_data.message_number = buf[50] + buf[51] * 0x100u;
+				ignitech_data.advance_1_grad = buf[105];
+				ignitech_data.advance_2_grad = buf[106];
+				ignitech_data.flags = buf[144];
 			}
 
 			total_read = 0;
@@ -311,7 +320,6 @@ int IGNITECH::query_device() {
 			return -1;
 	}
 	// Query controller for status
-	// TODO separate queries for different VERSIONS
 	if ( version == VERSION_V88 ) {
 		if ( DEBUG_IGNITECH ) {
 			perror ( "IGNITECH::query_device: Send v88");
