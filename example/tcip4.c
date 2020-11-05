@@ -29,6 +29,8 @@ int main() {
 	if (ptr < 0) {
 		error_message (ERROR, "error %d : %s", errno, strerror (errno));
 	}
+	int packet_size = 102;
+	int total_read = 0;
 	while(!time_to_quit) {
 		// wait for query then respond
 		fd_set	readset;
@@ -44,38 +46,47 @@ int main() {
 		}
 		if (select_result > 0) {
 			if (FD_ISSET(0,&readset)) {
-				unsigned char r_buf[102];
-				int read_bytes = read(0,r_buf,102);
+				unsigned char r_buf[packet_size];
+				int read_bytes = read(0,&r_buf[total_read],packet_size - total_read);
 				if (read_bytes < 0) {
 					error_message (WARN, "error %d : %s", errno, strerror (errno));
 		        }
 
 				else if (read_bytes > 0) {
-					error_message(DEBUG,"Read %d Bytes from tty, sending response.", read_bytes);
+					error_message(DEBUG,"Read %d Bytes from tty.", read_bytes);
+					total_read += read_bytes;
 				}
-				if (read_bytes == 102) {
-					int file_read_bytes = fread(w_buf,1,102,ptr); // read 102 bytes to our buffer
-					if (file_read_bytes == 102) {
-						int write_bytes = write(1,w_buf,102);
-						error_message (DEBUG, "Bytes Sent: %d", write_bytes);
-					}
-					else if (file_read_bytes < 102 ) {
-						error_message (DEBUG, "error %d : %s:: Bytes Read: %d, resetting file.", errno, strerror (errno),file_read_bytes);
-						rewind(ptr);
-						// The previous read failed, so after resetting the file
-						// read and write again
-						file_read_bytes = fread(w_buf,1,102,ptr);
-						if (file_read_bytes == 102) {
-							int write_bytes = write(1,w_buf,102);
+				if (total_read == packet_size) {
+					total_read = 0;
+					if ( r_buf[0] == 0x30 && r_buf[100] == 0x58 && r_buf[101] == 0x97 ) {
+						error_message(DEBUG,"Sending Response");
+						// TODO create our own custom response packet here (in a separate function) (option)
+						int file_read_bytes = fread(w_buf,1,packet_size,ptr); // read 102 bytes to our buffer
+						if (file_read_bytes == packet_size) {
+							int write_bytes = write(1,w_buf,packet_size);
 							error_message (DEBUG, "Bytes Sent: %d", write_bytes);
 						}
-						else {
-							// After going to front of file, still short read
-							// Serious issue, give up
-							return -1;
-						}
+						else if (file_read_bytes < packet_size ) {
+							error_message (DEBUG, "error %d : %s:: Bytes Read: %d, resetting file.", errno, strerror (errno),file_read_bytes);
+							rewind(ptr);
+							// The previous read failed, so after resetting the file
+							// read and write again
+							file_read_bytes = fread(w_buf,1,packet_size,ptr);
+							if (file_read_bytes == packet_size) {
+								int write_bytes = write(1,w_buf,packet_size);
+								error_message (DEBUG, "Bytes Sent: %d", write_bytes);
+							}
+							else {
+								// After going to front of file, still short read
+								// Serious issue, give up
+								return -1;
+							}
 
+						}
 					}
+				}
+				else if (total_read > packet_size ) {
+					total_read = 0;
 				}
 			}
 		}
