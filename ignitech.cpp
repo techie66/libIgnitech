@@ -363,7 +363,12 @@ int IGNITECH::open_device() {
 	as necessary. Initializes variables.
 */
 IGNITECH::IGNITECH( char const *file) {
-	device = strdup(file);
+	if ( file != NULL ) {
+		device = strdup(file);
+	}
+	else {
+		device = strdup("");
+	}
 	initialize();
 	open_device();
 	return;
