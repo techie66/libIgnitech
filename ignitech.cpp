@@ -27,6 +27,7 @@ void IGNITECH::initialize() {
 	raw_dump = false;
 	DEBUG_IGNITECH = false;
 	file_descriptor=-1;
+	version = VERSION_V88;
 }
 
 void IGNITECH::reset(bool force) {
@@ -312,11 +313,17 @@ int IGNITECH::query_device() {
 	// Query controller for status
 	// TODO separate queries for different VERSIONS
 	if ( version == VERSION_V88 ) {
+		if ( DEBUG_IGNITECH ) {
+			perror ( "IGNITECH::query_device: Send v88");
+		}
 	    size_t b_written = write(file_descriptor,IGNITECH_QUERY_V88,IGNITECH_PACKET_SIZE_V88);
 	    if (b_written == IGNITECH_PACKET_SIZE_V88 )// check for success
 		    return 0; // Good :)
 	}
 	if ( version == VERSION_V96 ) {
+		if ( DEBUG_IGNITECH ) {
+			perror ( "IGNITECH::query_device: Send v96");
+		}
 	    size_t b_written = write(file_descriptor,IGNITECH_QUERY_V96,IGNITECH_PACKET_SIZE_V96);
 	    if (b_written == IGNITECH_PACKET_SIZE_V96 )// check for success
 		    return 0; // Good :)
