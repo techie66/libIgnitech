@@ -47,7 +47,7 @@ API for libIgnitech
 #define IGNITECH_HEADER_DIAG  0x80
 #define IGNITECH_HEADER_DATA_V88  0x00
 #define IGNITECH_HEADER_DATA_V96  0x07
-#define IGNITECH_MAX_RESETS  5
+#define IGNITECH_MAX_RESETS  10
 
 // Endianness Dependant
 //  Multi-byte comparisons need correct order
