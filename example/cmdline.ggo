@@ -1,0 +1,14 @@
+package "TCIP4 Emulator"
+version "v0.1.0"
+args "--func-name=cmdline_parser"
+
+
+option "firmware-version"	f "TCIP4 firmware version to emulate." int typestr="88 or 96" required
+option "pipe-name"	p "Filename of where a link to the virtual serial port should be made." string typestr="filename" optional 
+option "sweep"	s "Set parameter to sweep" enum typestr="PARAMETER" values="RPM","SPEED","MAPKPA","MAPMV","BATTMV","PROGRAMMINGS","SERVO_MEASURED","CH1_MAXADVANCE","CH2_MAXADVANCE","CH3_MAXADVANCE","CH4_MAXADVANCE","DWELL_OPT","DWELL","RESPONSE_NUMBER","CH1_ADVANCE","CH2_ADVANCE","CH3_ADVANCE","CH4_ADVANCE","FLAGS_51","FLAGS_90","FLAGS_91" default="RPM" optional
+option "data-file"	d "Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored." string typestr="filename" optional
+option "interactive" i "User input required to change output packet." optional
+option "hex-output" x "Output a HEX representation of each packet sent." optional
+option "v"		v "Verbose output. Specify multiple times for increasing verbosity." optional multiple(1-3)
+option "verbose"	- "Set level of verbosity explicitly. \n(Overrides -v)\n" enum typestr="VERBOSITY" values="NONE","ERROR","WARN","INFO","DEBUG" default="DEBUG" optional
+option "quiet"		q "Suppress output. Same as --verbose=NONE (Overrides both -v and --verbose)" optional
