@@ -109,7 +109,8 @@ am__v_lt_1 =
 am_ignitech_example_dyn_OBJECTS = ignitech.$(OBJEXT)
 ignitech_example_dyn_OBJECTS = $(am_ignitech_example_dyn_OBJECTS)
 ignitech_example_dyn_DEPENDENCIES =
-am_tcip4_emulator_OBJECTS = tcip4.$(OBJEXT) error_handling.$(OBJEXT)
+am_tcip4_emulator_OBJECTS = tcip4.$(OBJEXT) error_handling.$(OBJEXT) \
+	cmdline.$(OBJEXT)
 tcip4_emulator_OBJECTS = $(am_tcip4_emulator_OBJECTS)
 tcip4_emulator_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -317,7 +318,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ignitech_example_SOURCES = ignitech.cpp
 ignitech_example_dyn_SOURCES = ignitech.cpp
-tcip4_emulator_SOURCES = tcip4.c error_handling.c
+tcip4_emulator_SOURCES = tcip4.c error_handling.c cmdline.c
 ignitech_example_LDADD = ../libignitech.la
 ignitech_example_dyn_LDADD = -lignitech
 all: all-am
@@ -372,6 +373,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmdline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error_handling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ignitech.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcip4.Po@am__quote@

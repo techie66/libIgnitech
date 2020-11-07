@@ -21,11 +21,13 @@
 #include "serial.h"
 
 unsigned char const IGNITECH_QUERY_V88[102] = {0x30,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x58,0x97};
+unsigned char const IGNITECH_QUERY_V96[152] = {0x30,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x58,0x97};
 void IGNITECH::initialize() {
 	reset(true);
 	raw_dump = false;
 	DEBUG_IGNITECH = false;
 	file_descriptor=-1;
+	version = VERSION_V88;
 }
 
 void IGNITECH::reset(bool force) {
@@ -64,12 +66,11 @@ int IGNITECH::read_sync (ignitech_t& ignitech_data ) {
 
 IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 	time_t const reset_timeout = 1;
-	static time_t reset_last_read = time(0);
+	static time_t reset_last_read = time(NULL);
 	static unsigned char buf[IGNITECH_PACKET_SIZE_V96];
 	static bool found_header = false;
 	static bool sent_header = false;
 	static size_t total_read = 0;
-	static size_t good_read = 0;
 	static size_t packet_size = IGNITECH_PACKET_SIZE_V88;
 
 	if ( time(0) > reset_last_read + reset_timeout ) {
@@ -77,9 +78,10 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 		if ( DEBUG_IGNITECH ) {
 			perror ( "IGNITECH::read_async: No response from controller within timeout. Resetting.");
 		}
+		// TODO it hasn't proved necessary, but it may be a good idea to close the port and reopen
+		reset_last_read = time(NULL);
 		reset();
 		total_read = 0;
-		good_read = 0;
 		found_header = false;
 		sent_header = false;
 		buf[0] = 0;
@@ -87,19 +89,24 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 
 	if ( file_descriptor < 0 ) {
 		// Bad file descriptor, reset
+		if ( DEBUG_IGNITECH ) {
+			perror ( "IGNITECH::read_async: Device not open. Resetting.");
+		}
 		reset();
 		total_read = 0;
-		good_read = 0;
 		found_header = false;
 		sent_header = false;
 		buf[0] = 0;
 	}
 
-	if ( total_read >= packet_size ) {
+	if ( total_read > packet_size ) {
 		// Read more than expected, reset
+		if ( DEBUG_IGNITECH ) {
+			perror ( "IGNITECH::read_async: Read more than expected. resetting");
+			printf("Read: (%d) Expected: (%d)\n",total_read,packet_size);
+		}
 		reset();
 		total_read = 0;
-		good_read = 0;
 		found_header = false;
 		sent_header = false;
 		buf[0] = 0;
@@ -107,8 +114,9 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 
 	if ( !sent_header && total_read == 0 ) {
 		// On reset, or after successful reading of packet
-		if ( query_device() < 0 )
+		if ( query_device() < 0 ) {
 			return IGN_ERR;
+		}
 		sent_header = true;
 	}
 	
@@ -143,12 +151,11 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 						return IGN_AGAIN;
 					}
 					reset_last_read = time(0);
-					total_read += b_read;
-					sent_header = false;
+					//sent_header = false;
 					if (buf[0] == IGNITECH_HEADER_DATA ) {		// Found header
 						found_header = true;
 						sent_header = false;
-						good_read += 1;
+						total_read += b_read;
 					}
 				}
 			}
@@ -175,7 +182,7 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 			else if (select_result == 0){} // Timeout
 			else if (select_result > 0) {
 				if (FD_ISSET(file_descriptor,&readset)) {
-					size_t b_read = read(file_descriptor,&buf[good_read],packet_size - total_read);
+					size_t b_read = read(file_descriptor,&buf[total_read],packet_size - total_read);
 					if (b_read <= 0 ) {
 						if (b_read < 0) {// Failure or none
 							if ( DEBUG_IGNITECH ) {
@@ -186,9 +193,12 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 						return IGN_AGAIN;
 					}
 					else {
-						reset_last_read = time(0);
-						good_read += b_read;
+						reset_last_read = time(NULL);
 						total_read += b_read;
+						if ( DEBUG_IGNITECH ) {
+							perror("IGNITECH::read_async:read after header");
+							printf("Total read %d\n",total_read);
+						}
 					}
 				}
 				else
@@ -197,11 +207,31 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 			else
 				return IGN_AGAIN;
 		}
-		if ( buf[1] == IGNITECH_HEADER_DATA_V88 ) {
+		if ( total_read >= IGNITECH_PACKET_SIZE_V88 && buf[100] == IGNITECH_VERSION_BYTE_V88 ) {
+			if ( DEBUG_IGNITECH ) {
+				perror("IGNITECH::read_async:found version 88");
+			}
 			version = VERSION_V88;
 			packet_size = IGNITECH_PACKET_SIZE_V88;
 		}
-		else if ( buf[1] == IGNITECH_HEADER_DATA_V96 ) {
+		else if ( total_read >= IGNITECH_PACKET_SIZE_V88 && buf[100] == IGNITECH_VERSION_BYTE_V96 ) {
+			// Tried reading V88, but V96 responded with a packet telling us we should use V96
+			if ( DEBUG_IGNITECH ) {
+				perror("IGNITECH::read_async:V88 packet,found version 96");
+			}
+			version = VERSION_V96;
+			packet_size = IGNITECH_PACKET_SIZE_V96;
+			// Reset to read a new packet with correct version
+			reset_last_read = time(NULL);
+			total_read = 0;
+			found_header = false;
+                	sent_header = false;
+                	buf[0] = 0;
+		}
+		else if ( total_read >= IGNITECH_PACKET_SIZE_V96 && buf[150] == IGNITECH_VERSION_BYTE_V96 ) {
+			if ( DEBUG_IGNITECH ) {
+				perror("IGNITECH::read_async:found version 96");
+			}
 			version = VERSION_V96;
 			packet_size = IGNITECH_PACKET_SIZE_V96;
 		}
@@ -210,6 +240,10 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 		return IGN_AGAIN;				// No error, not done
 	
 	if ( packet_size - total_read == 0 ) {
+		if ( raw_dump ) {
+			fwrite(buf,1,total_read,dump_file);
+			fflush(dump_file);
+		}
 		if ( checksum_is_good(buf,packet_size) && packet_version_matches(buf,packet_size) ) {
 			status = IGN_SUC;
 			if ( version == VERSION_V88 ) {
@@ -223,28 +257,36 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				}
 			}
 			if ( version == VERSION_V96 ) {
-				// TODO
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
 				ignitech_data.map_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.map_kpa = buf[6] + buf[7] *0x100u;
 				ignitech_data.battery_mV = buf[8] + buf[9] * 0x100u;
+				ignitech_data.programmings = buf[14] + buf[15] * 0x100u;
+				ignitech_data.advance_max_1_grad = buf[18] + buf[19] * 0x100u;
+				ignitech_data.advance_max_2_grad = buf[20] + buf[21] * 0x100u;
+				ignitech_data.dwell_opt_ms = buf[26] + buf[27] * 0x100u;
+				ignitech_data.dwell_ms = buf[28] + buf[29] * 0x100u;
+				ignitech_data.runtime_min = buf[30] + buf[31] * 0x100u;
+				ignitech_data.message_number = buf[50] + buf[51] * 0x100u;
+				ignitech_data.advance_1_grad = buf[105];
+				ignitech_data.advance_2_grad = buf[106];
+				ignitech_data.flags = buf[144];
 			}
 
-			if ( raw_dump ) {
-				fwrite(buf,1,total_read,dump_file);
-				fflush(dump_file);
-			}
 			total_read = 0;
-			good_read = 0;
 			found_header = false;
 			buf[0] = 0;
 			num_resets = 0;
 			return status;
 		}
 		else {
+			// Checksum bad or version mismatch
+			if ( DEBUG_IGNITECH ) {
+				perror("IGNITECH::read_async: Checksum or version error. Quitting.");
+				printf("Version expected:%d, bytes expected: %d bytes read: %d\n",version,packet_size,total_read);
+			}
 			reset();
 			total_read = 0;
-			good_read = 0;
 			found_header = false;
 			buf[0] = 0;
 			return IGN_ERR;
@@ -278,10 +320,25 @@ int IGNITECH::query_device() {
 			return -1;
 	}
 	// Query controller for status
-	// TODO separate queries for different VERSIONS
-	size_t b_written = write(file_descriptor,IGNITECH_QUERY_V88,IGNITECH_PACKET_SIZE_V88);
-	if (b_written == IGNITECH_PACKET_SIZE_V88 )// check for success
-		return 0; // Good :)
+	if ( version == VERSION_V88 ) {
+		if ( DEBUG_IGNITECH ) {
+			perror ( "IGNITECH::query_device: Send v88");
+		}
+	    size_t b_written = write(file_descriptor,IGNITECH_QUERY_V88,IGNITECH_PACKET_SIZE_V88);
+	    if (b_written == IGNITECH_PACKET_SIZE_V88 )// check for success
+		    return 0; // Good :)
+	}
+	if ( version == VERSION_V96 ) {
+		if ( DEBUG_IGNITECH ) {
+			perror ( "IGNITECH::query_device: Send v96");
+		}
+	    size_t b_written = write(file_descriptor,IGNITECH_QUERY_V96,IGNITECH_PACKET_SIZE_V96);
+	    if (b_written == IGNITECH_PACKET_SIZE_V96 )// check for success
+		    return 0; // Good :)
+	}
+	if ( DEBUG_IGNITECH ) {
+		perror ( "IGNITECH::query_device: Write failed. Quitting.");
+	}
 	return -1; // Bad  :(
 }
 
@@ -314,7 +371,12 @@ int IGNITECH::open_device() {
 	as necessary. Initializes variables.
 */
 IGNITECH::IGNITECH( char const *file) {
-	device = strdup(file);
+	if ( file != NULL ) {
+		device = strdup(file);
+	}
+	else {
+		device = strdup("");
+	}
 	initialize();
 	open_device();
 	return;

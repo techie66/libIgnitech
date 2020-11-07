@@ -47,7 +47,7 @@ API for libIgnitech
 #define IGNITECH_HEADER_DIAG  0x80
 #define IGNITECH_HEADER_DATA_V88  0x00
 #define IGNITECH_HEADER_DATA_V96  0x07
-#define IGNITECH_MAX_RESETS  5
+#define IGNITECH_MAX_RESETS  10
 
 // Endianness Dependant
 //  Multi-byte comparisons need correct order
@@ -74,6 +74,16 @@ struct ignitech_t{
 	uint16_t	battery_mV;
 	uint16_t	map_mV;
 	uint16_t	map_kpa;
+	uint16_t	programmings;
+	uint16_t	advance_max_1_grad;
+	uint16_t	advance_max_2_grad;
+	uint16_t	dwell_opt_ms;
+	uint16_t	dwell_ms;
+	uint16_t	runtime_min;
+	uint16_t	message_number;
+	uint8_t	advance_1_grad;
+	uint8_t	advance_2_grad;
+	uint8_t	flags;
 };
 
 class IGNITECH {
