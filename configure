@@ -595,7 +595,7 @@ PACKAGE_STRING='IGNITECH 0.2'
 PACKAGE_BUGREPORT='BUG-REPORT-ADDRESS'
 PACKAGE_URL=''
 
-ac_unique_file="ignitech.cpp"
+ac_unique_file="src/ignitech.cpp"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -17313,7 +17313,7 @@ $as_echo "#define AC_APPLE_UNIVERSAL_BUILD 1" >>confdefs.h
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile example/Makefile check/Makefile"
+ac_config_files="$ac_config_files Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -18434,8 +18434,6 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "example/Makefile") CONFIG_FILES="$CONFIG_FILES example/Makefile" ;;
-    "check/Makefile") CONFIG_FILES="$CONFIG_FILES check/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

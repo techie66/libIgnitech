@@ -1,4 +1,4 @@
-#include "../ignitech.h"
+#include "../src/ignitech.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>

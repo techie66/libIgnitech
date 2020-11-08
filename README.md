@@ -21,8 +21,10 @@ INSTALL contains modified generic GNU install instructions.
 
 ### Quick installation: 
 ```
+	git clone git@github.com:techie66/libIgnitech.git
 	./configure
 	make
+	make check
 	sudo make install
 ```
 
@@ -34,7 +36,7 @@ To make examples do:
 ```
 	make examples
 ```
-You will get "ignitech_example".
+You will get "ignitech_example" and "tcip4_emulator"
 
 To make a dynmically linked example:
 ```
@@ -48,9 +50,9 @@ make git-clean will delete all autotools generated files and leave just the file
 make uninstall works as expected.
 
 # TODO
-- [ ] API
+- [ ] API // Not yet stable
 - [x] Checksum checking
-- [ ] Support for v96
+- [x] Support for v96
 - [x] CLI Example
 - [x] Communication setup
 - [x] querying controller

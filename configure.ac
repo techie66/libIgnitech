@@ -3,9 +3,9 @@
 
 AC_PREREQ([2.69])
 AC_INIT([IGNITECH], [0.2], [BUG-REPORT-ADDRESS])
-AC_CONFIG_SRCDIR([ignitech.cpp])
+AC_CONFIG_SRCDIR([src/ignitech.cpp])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 LT_INIT
 
 # Checks for programs.
@@ -32,5 +32,5 @@ AC_C_BIGENDIAN
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile example/Makefile check/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

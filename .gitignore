@@ -36,6 +36,8 @@
 *.out
 *.app
 example/tcip4_emulator
+example/ignitech_example
+example/ignitech_example_dyn
 
 
 # Autotools/libtool/gnumake Stuff
@@ -60,6 +62,7 @@ config.h
 #config.h.in~
 #ltmain.sh
 libtool
+*/.dirstamp
 
 #example/Makefile
 #example/Makefile.in
@@ -67,9 +70,13 @@ libtool
 #example/.dirstamp
 #example/.libs
 #example/*.o
-example/ignitech_example
-example/ignitech_example_dyn
 
 
 # extra
 example/virtual-tty
+
+# Check stuff
+check/rpm
+check/sensormv
+check/*.log
+check/*.trs

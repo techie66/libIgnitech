@@ -1,11 +1,11 @@
-#include "../ignitech.h"
+#include "../src/ignitech.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
 
 int main() {
-	IGNITECH bike ("virtual-tty");
+	IGNITECH bike ("rpm-tty");
 	int read_status;
 	for (int i=0;i<65535;i++){
 		read_status = bike.read_sync();

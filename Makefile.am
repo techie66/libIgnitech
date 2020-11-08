@@ -1,9 +1,34 @@
-lib_LTLIBRARIES = libignitech.la
-libignitech_la_SOURCES = ignitech.cpp serial.cpp
-include_HEADERS = ignitech.h
-SUBDIRS = . example check
+lib_LTLIBRARIES = src/libignitech.la
+src_libignitech_la_SOURCES = src/ignitech.cpp src/serial.cpp
+include_HEADERS = src/ignitech.h
+#SUBDIRS := src example check
 examples:
 	$(MAKE) $(AM_MAKEFLAGS) -C example example
 git-clean: distclean
 	rm -fr autom4te.cache
 	rm -f Makefile.in aclocal.m4 compile config.guess config.h.in config.h.in~ config.sub configure depcomp example/.dirstamp example/Makefile.in install-sh ltmain.sh missing
+
+bin_PROGRAMS =  			example/ignitech_example \
+					example/tcip4_emulator
+EXTRA_PROGRAMS =			example/ignitech_example_dyn
+example_ignitech_example_SOURCES =	example/ignitech.cpp
+example_ignitech_example_dyn_SOURCES =	example/ignitech.cpp
+example_tcip4_emulator_SOURCES = 	example/tcip4.c \
+					example/error_handling.c \
+					example/cmdline.c
+example_ignitech_example_LDADD =	src/libignitech.la
+example_ignitech_example_dyn_LDADD =	-lignitech
+example:
+	$(MAKE) $(AM_MAKEFLAGS) -C .. all
+	$(MAKE) $(AM_MAKEFLAGS) ignitech_example
+	$(MAKE) $(AM_MAKEFLAGS) tcip4_emulator
+
+example_dyn:
+	$(MAKE) $(AM_MAKEFLAGS) ignitech_example_dyn
+
+check_PROGRAMS =		check/rpm \
+				check/sensormv
+AM_DEFAULT_SOURCE_EXT = .cpp
+LDADD =				src/libignitech.la
+TESTS =				check/rpm.sh \
+				check/sensormv.sh
