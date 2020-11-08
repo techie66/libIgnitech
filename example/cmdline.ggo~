@@ -44,7 +44,7 @@ option "sweep"	s "Set parameter to sweep" enum typestr="PARAMETER"
 		"FLAGS_V96_142",
 		"FLAGS_V96_143",
 		"FLAGS_V96_144",
-		"FLAGS_V96_145"
+		"FLAGS_V96_145",
 	default="RPM" optional
 option "data-file"	d "Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored." string typestr="filename" optional
 option "interactive" i "User input required to change output packet." optional

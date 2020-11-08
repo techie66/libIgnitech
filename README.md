@@ -1,6 +1,7 @@
 <!-- vim: syntax=Markdown -->
 # libIgnitech
-Library to read information from the Ignitech TCIP-4 ignition controller (v88).
+Library to read information from the Ignitech TCIP-4 ignition controller (v88
+or v96) via its proprietary serial protocol.
 Currently supporting the folowing data:
  - RPM
  - Battery Voltage

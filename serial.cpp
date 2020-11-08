@@ -31,13 +31,10 @@ set_interface_attribs (int fd, int speed, int parity) {
 	cfsetispeed (&tty, speed);
 
 	tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;	// 8-bit chars
-	// disable IGNBRK for mismatched speed tests; otherwise receive break
-	// as \000 chars
-	tty.c_iflag &= ~IGNBRK;		// disable break processing
-	tty.c_lflag = 0;		// no signaling chars, no echo,
-					// no canonical processing
-	tty.c_oflag = 0;		// no remapping, no delays
-	tty.c_cc[VMIN]  = 0;		// read doesn't block
+	tty.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
+	tty.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+	tty.c_oflag &= ~(OPOST);
+	tty.c_cc[VMIN]  = 0;		// read doesn't wait for min bytes
 	tty.c_cc[VTIME] = 5;		// 0.5 seconds read timeout
 
 	tty.c_iflag &= ~(IXON | IXOFF | IXANY);	// shut off xon/xoff ctrl

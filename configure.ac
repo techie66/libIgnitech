@@ -32,5 +32,5 @@ AC_C_BIGENDIAN
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile example/Makefile])
+AC_CONFIG_FILES([Makefile example/Makefile check/Makefile])
 AC_OUTPUT

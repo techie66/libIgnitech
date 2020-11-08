@@ -12,32 +12,8 @@
 #include "error_handling.h"
 #include "cmdline.h"
 
-#define MAX_PACKET_SIZE 152
+#define MAX_PACKET_SIZE 300
 #define STDIN_BUFFER 4096
-/*
-typedef enum{
-	RPM,
-	SPEED,
-	MAPKPA,
-	MAPMV,
-	BATTMV,
-	PROGRAMMINGS,
-	SERVO_MEASURED,
-	CH1_MAXADVANCE,
-	CH2_MAXADVANCE,
-	CH3_MAXADVANCE,
-	CH4_MAXADVANCE,
-	DWELL_OPT,
-	DWELL,
-	RESPONSE_NUMBER,
-	CH1_ADVANCE,
-	CH2_ADVANCE,
-	CH3_ADVANCE,
-	CH4_ADVANCE,
-	IG_FLAGS,
-	
-} sweep_t;
-*/
 
 unsigned char * next_packet(int version, enum enum_sweep sweep);
 
@@ -51,13 +27,11 @@ int main(int argc, char *argv[]) {
 	// register signal SIGINT and signal handler  
 	signal(SIGINT, signalHandler);
 
-	// TODO make these variables options
 	int version = 88;
 	enum enum_sweep sweep = sweep_arg_RPM;
 	LEVEL_DEBUG = ERROR;
 	char const* datafilename = "";
 	char const* pipename = "./virtual-tty";
-	// END TODO
 
 	struct gengetopt_args_info args_info;
 	struct cmdline_parser_params *params;
@@ -133,17 +107,20 @@ int main(int argc, char *argv[]) {
 		int maxfd = (pts > STDIN_FILENO)?pts:STDIN_FILENO;
 		select_result = select(maxfd+1, &readset, NULL, NULL, &timeout);
 		if (select_result < 0) {
-			error_message (ERROR, "error %d : %s", errno, strerror (errno));
+			if ( errno != EINTR ) {
+				error_message (ERROR, "error %d : %s", errno, strerror (errno));
+			}
 			time_to_quit = true;
 			continue;
 		}
 		if (select_result > 0) {
-			// TODO
 			if (FD_ISSET(STDIN_FILENO,&readset)) {
 				unsigned char buf[STDIN_BUFFER];
 				int read_bytes = read(STDIN_FILENO,buf,STDIN_BUFFER);
 				if (read_bytes < 0) {
-					error_message (WARN, "Error reading STDIN. %d : %s", errno, strerror (errno));
+					if ( errno != EINTR ) {
+						error_message (WARN, "Error reading STDIN. %d : %s", errno, strerror (errno));
+					}
 				}
 				else if (read_bytes >= 0) {
 					error_message (INFO, "Read %d bytes from STDIN.",read_bytes);
@@ -156,18 +133,20 @@ int main(int argc, char *argv[]) {
 				static unsigned char r_buf[MAX_PACKET_SIZE];
 				int read_bytes = read(pts,&r_buf[total_read],packet_size - total_read);
 				if (read_bytes < 0) {
-					error_message (WARN, "error %d : %s", errno, strerror (errno));
+					if ( errno != EINTR ) {
+						error_message (ERROR, "error %d : %s", errno, strerror (errno));
+					}
 					time_to_quit = true;
 					continue;
 		        }
 
-				else if (read_bytes > 0) {
+				else if (read_bytes >= 0) {
 					error_message(DEBUG,"Read %d Bytes from tty.", read_bytes);
 					total_read += read_bytes;
 				}
 				if (total_read == packet_size) {
 					total_read = 0;
-					if ( r_buf[0] == 0x30 && r_buf[100] == 0x58 && r_buf[101] == 0x97 ) {
+					if ( r_buf[0] == 0x30 && r_buf[packet_size-2] == version && r_buf[packet_size-1] == (0x30 ^ version ^ 0xFF) ) {
 						error_message(INFO,"Sending Response");
 						if ( get_next_packet ) {
 							// read / create next packet
@@ -219,78 +198,113 @@ int main(int argc, char *argv[]) {
 unsigned char * next_packet(int version, enum enum_sweep sweep) {
 	static unsigned char packet[MAX_PACKET_SIZE];
 	static uint16_t counter = 0;
-	
+	// Extract separate bytes from counter
+	unsigned char lsb = counter & 0xff;
+	unsigned char msb = counter >> 8;
+
 	if ( version == 88 ) {
 		if ( counter == 0 ) {
 			for ( int i = 0; i<102;i++) {
 				packet[i] = 0x00;
 			}
+			packet[0] = 0xb0;
+			packet[62] = 0x6c;
+			packet[100] = 0x58;
 		}
 
-		packet[0] = 0xb0;
-		packet[62] = 0x6c;
-		packet[100] = 0x58;
 
 		switch (sweep) {
 			case sweep_arg_RPM:
-				*(uint16_t*)&packet[2] = counter;
+				packet[2] = lsb;
+				packet[3] = msb;
 				break;
-			case sweep_arg_MAPMV:
-				*(uint16_t*)&packet[4] = counter;
+			case sweep_arg_SENSORMV:
+				packet[4] = lsb;
+				packet[5] = msb;
 				break;
 			case sweep_arg_BATTMV:
-				*(uint16_t*)&packet[6] = counter;
+				packet[6] = lsb;
+				packet[7] = msb;
 				break;
 			case sweep_arg_SERVO_MEASURED:
-				*(uint16_t*)&packet[8] = counter;
+				packet[8] = lsb;
+				packet[9] = msb;
+				break;
+			case sweep_arg_SERVO_REQUESTED:
+				packet[10] = lsb;
+				packet[11] = msb;
 				break;
 			case sweep_arg_PROGRAMMINGS:
-				*(uint16_t*)&packet[12] = counter;
+				packet[12] = lsb;
+				packet[13] = msb;
 				break;
 			case sweep_arg_CH1_MAXADVANCE:
-				*(uint16_t*)&packet[14] = counter;
+				packet[14] = lsb;
+				packet[15] = msb;
 				break;
 			case sweep_arg_CH2_MAXADVANCE:
-				*(uint16_t*)&packet[16] = counter;
+				packet[16] = lsb;
+				packet[17] = msb;
 				break;
 			case sweep_arg_CH3_MAXADVANCE:
-				*(uint16_t*)&packet[18] = counter;
+				packet[18] = lsb;
+				packet[19] = msb;
 				break;
 			case sweep_arg_CH4_MAXADVANCE:
-				*(uint16_t*)&packet[20] = counter;
+				packet[20] = lsb;
+				packet[21] = msb;
 				break;
-			case sweep_arg_MAPKPA:
-				*(uint16_t*)&packet[22] = counter;
+			case sweep_arg_SENSOR_VALUE:
+				packet[22] = lsb;
+				packet[23] = msb;
 				break;
 			case sweep_arg_DWELL_OPT:
-				*(uint16_t*)&packet[24] = counter;
+				packet[24] = lsb;
+				packet[25] = msb;
 				break;
 			case sweep_arg_DWELL:
-				*(uint16_t*)&packet[26] = counter;
+				packet[26] = lsb;
+				packet[27] = msb;
 				break;
 			case sweep_arg_RESPONSE_NUMBER:
-				*(uint16_t*)&packet[44] = counter;
+				packet[44] = lsb;
+				packet[45] = msb;
+				break;
+			case sweep_arg_CLUTCH_MASTER:
+				packet[50] = lsb % 2;
+				break;
+			case sweep_arg_SENSOR_TYPE:
+				packet[51] = lsb % 3;
+				break;
+			case sweep_arg_POWER_OUT:
+				packet[52] = lsb % 4;
 				break;
 			case sweep_arg_CH1_ADVANCE:
-				*(uint8_t*)&packet[57] = counter;
+				packet[57] = lsb;
 				break;
 			case sweep_arg_CH2_ADVANCE:
-				*(uint8_t*)&packet[58] = counter;
+				packet[58] = lsb;
 				break;
 			case sweep_arg_CH3_ADVANCE:
-				*(uint8_t*)&packet[59] = counter;
+				packet[59] = lsb;
 				break;
 			case sweep_arg_CH4_ADVANCE:
-				*(uint8_t*)&packet[60] = counter;
+				packet[60] = lsb;
 				break;
-			case sweep_arg_FLAGS_51:
-				*(uint8_t*)&packet[51] = counter;
+			case sweep_arg_LIMITER:
+				packet[61] = lsb % 2;
 				break;
-			case sweep_arg_FLAGS_90:
-				*(uint8_t*)&packet[90] = counter;
+			case sweep_arg_RETARD:
+				packet[63] = lsb % 2;
 				break;
-			case sweep_arg_FLAGS_91:
-				*(uint8_t*)&packet[91] = counter;
+			case sweep_arg_START_LIMITER:
+				packet[64] = lsb % 2;
+				break;
+			case sweep_arg_FLAGS_V88_90:
+				packet[90] = 1 << lsb;
+				break;
+			case sweep_arg_FLAGS_V88_91:
+				packet[91] = 1 << lsb;
 				break;
 		}
 
@@ -300,6 +314,145 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 		}
 		cs ^= 0xFF;
 		packet[101] = cs;
+	}
+	if ( version == 96 ) {
+		if ( counter == 0 ) {
+			for ( int i = 0; i<102;i++) {
+				packet[i] = 0x00;
+			}
+			packet[0] = 0xb0;
+			packet[1] = 0xFF;
+			packet[114] = 0x6c; // dwell calibration
+			packet[119] = 0x04; // 4 cylinders
+			packet[143] = 0x3f; // all input options enabled
+			packet[150] = 0x60; //version
+		}
+
+		
+		switch (sweep) {
+			case sweep_arg_RPM:
+				packet[2] = lsb;
+				packet[3] = msb;
+				break;
+			case sweep_arg_SENSORMV:
+				packet[4] = lsb;
+				packet[5] = msb;
+				break;
+			case sweep_arg_SENSOR_VALUE:
+				packet[6] = lsb;
+				packet[7] = msb;
+				break;
+			case sweep_arg_BATTMV:
+				packet[8] = lsb;
+				packet[9] = msb;
+				break;
+			case sweep_arg_SERVO_MEASURED:
+				//packet[8] = lsb;
+				//packet[9] = msb;
+				break;
+			case sweep_arg_SERVO_REQUESTED:
+				//packet[10] = lsb;
+				//packet[11] = msb;
+				break;
+			case sweep_arg_PROGRAMMINGS:
+				packet[14] = lsb;
+				packet[15] = msb;
+				break;
+			case sweep_arg_CH1_MAXADVANCE:
+				packet[18] = lsb;
+				packet[19] = msb;
+				break;
+			case sweep_arg_CH2_MAXADVANCE:
+				packet[20] = lsb;
+				packet[21] = msb;
+				break;
+			case sweep_arg_CH3_MAXADVANCE:
+				packet[22] = lsb;
+				packet[23] = msb;
+				break;
+			case sweep_arg_CH4_MAXADVANCE:
+				packet[24] = lsb;
+				packet[25] = msb;
+				break;
+			case sweep_arg_DWELL_OPT:
+				packet[26] = lsb;
+				packet[27] = msb;
+				break;
+			case sweep_arg_DWELL:
+				packet[28] = lsb;
+				packet[29] = msb;
+				break;
+			case sweep_arg_RUNTIME:
+				packet[30] = lsb;
+				packet[31] = msb;
+				break;
+			case sweep_arg_PROP1:
+				packet[42] = lsb;
+				packet[43] = msb;
+				break;
+			case sweep_arg_PROP2:
+				packet[44] = lsb;
+				packet[45] = msb;
+				break;
+			case sweep_arg_PROP3:
+				packet[46] = lsb;
+				packet[47] = msb;
+				break;
+			case sweep_arg_PROP4:
+				packet[48] = lsb;
+				packet[49] = msb;
+				break;
+			case sweep_arg_RESPONSE_NUMBER:
+				packet[50] = lsb;
+				packet[51] = msb;
+				break;
+			case sweep_arg_SENSOR_TYPE:
+				packet[100] = lsb % 3;
+				break;
+			case sweep_arg_POWER_OUT:
+				packet[109] = lsb % 4;
+				break;
+			case sweep_arg_CH1_ADVANCE:
+				packet[105] = lsb;
+				break;
+			case sweep_arg_CH2_ADVANCE:
+				packet[106] = lsb;
+				break;
+			case sweep_arg_CH3_ADVANCE:
+				packet[107] = lsb;
+				break;
+			case sweep_arg_CH4_ADVANCE:
+				packet[108] = lsb;
+				break;
+			case sweep_arg_NUM_CYLINDERS:
+				packet[119] = lsb % 5;
+				break;
+			case sweep_arg_FLAGS_V96_140:
+				packet[140] = 1 << lsb;
+				break;
+			case sweep_arg_FLAGS_V96_141:
+				packet[141] = 1 << lsb;
+				break;
+			case sweep_arg_FLAGS_V96_142:
+				packet[142] = 1 << lsb;
+				break;
+			case sweep_arg_FLAGS_V96_143:
+				packet[143] = 1 << lsb;
+				break;
+			case sweep_arg_FLAGS_V96_144:
+				packet[144] = 1 << lsb;
+				break;
+			case sweep_arg_FLAGS_V96_145:
+				packet[145] = 1 << lsb;
+				break;
+		}
+
+		unsigned char cs = 0;
+		for ( int i = 0; i < 152 - 1; i++ ) {
+			cs ^= packet[i];
+		}
+		cs ^= 0xFF;
+		packet[151] = cs;
 	}
 	counter++;
 	return packet;

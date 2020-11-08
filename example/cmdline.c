@@ -36,9 +36,9 @@ const char *gengetopt_args_info_description = "";
 const char *gengetopt_args_info_help[] = {
   "  -h, --help                    Print help and exit",
   "  -V, --version                 Print version and exit",
-  "  -f, --firmware-version=88 or 96\n                                TCIP4 firmware version to emulate.",
+  "  -f, --firmware-version=88 or 96\n                                TCIP4 firmware version to emulate.  (possible\n                                  values=\"88\", \"96\")",
   "  -p, --pipe-name=filename      Filename of where a link to the virtual serial\n                                  port should be made.",
-  "  -s, --sweep=PARAMETER         Set parameter to sweep  (possible\n                                  values=\"RPM\", \"SPEED\", \"MAPKPA\",\n                                  \"MAPMV\", \"BATTMV\", \"PROGRAMMINGS\",\n                                  \"SERVO_MEASURED\", \"CH1_MAXADVANCE\",\n                                  \"CH2_MAXADVANCE\", \"CH3_MAXADVANCE\",\n                                  \"CH4_MAXADVANCE\", \"DWELL_OPT\", \"DWELL\",\n                                  \"RESPONSE_NUMBER\", \"CH1_ADVANCE\",\n                                  \"CH2_ADVANCE\", \"CH3_ADVANCE\",\n                                  \"CH4_ADVANCE\", \"FLAGS_51\", \"FLAGS_90\",\n                                  \"FLAGS_91\" default=`RPM')",
+  "  -s, --sweep=PARAMETER         Set parameter to sweep  (possible\n                                  values=\"RPM\", \"SPEED\", \"SENSOR_VALUE\",\n                                  \"SENSORMV\", \"SENSOR_TYPE\", \"BATTMV\",\n                                  \"PROGRAMMINGS\", \"SERVO_MEASURED\",\n                                  \"SERVO_REQUESTED\", \"NUM_CYLINDERS\",\n                                  \"CH1_MAXADVANCE\", \"CH2_MAXADVANCE\",\n                                  \"CH3_MAXADVANCE\", \"CH4_MAXADVANCE\",\n                                  \"DWELL_OPT\", \"DWELL\", \"RUNTIME\",\n                                  \"PROP1\", \"PROP2\", \"PROP3\", \"PROP4\",\n                                  \"RESPONSE_NUMBER\", \"CH1_ADVANCE\",\n                                  \"CH2_ADVANCE\", \"CH3_ADVANCE\",\n                                  \"CH4_ADVANCE\", \"LIMITER\",\n                                  \"START_LIMITER\", \"RETARD\",\n                                  \"CLUTCH_MASTER\", \"POWER_OUT\",\n                                  \"FLAGS_V88_90\", \"FLAGS_V88_91\",\n                                  \"FLAGS_V96_140\", \"FLAGS_V96_141\",\n                                  \"FLAGS_V96_142\", \"FLAGS_V96_143\",\n                                  \"FLAGS_V96_144\", \"FLAGS_V96_145\"\n                                  default=`RPM')",
   "  -d, --data-file=filename      Data file in binary form. File must contain\n                                  properly sized packets. If this is specified,\n                                  '--sweep' is ignored.",
   "  -i, --interactive             User input required to change output packet.",
   "  -x, --hex-output              Output a HEX representation of each packet\n                                  sent.",
@@ -66,7 +66,8 @@ cmdline_parser_internal (int argc, char **argv, struct gengetopt_args_info *args
 static int
 cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
-const char *cmdline_parser_sweep_values[] = {"RPM", "SPEED", "MAPKPA", "MAPMV", "BATTMV", "PROGRAMMINGS", "SERVO_MEASURED", "CH1_MAXADVANCE", "CH2_MAXADVANCE", "CH3_MAXADVANCE", "CH4_MAXADVANCE", "DWELL_OPT", "DWELL", "RESPONSE_NUMBER", "CH1_ADVANCE", "CH2_ADVANCE", "CH3_ADVANCE", "CH4_ADVANCE", "FLAGS_51", "FLAGS_90", "FLAGS_91", 0}; /*< Possible values for sweep. */
+const char *cmdline_parser_firmware_version_values[] = {"88", "96", 0}; /*< Possible values for firmware-version. */
+const char *cmdline_parser_sweep_values[] = {"RPM", "SPEED", "SENSOR_VALUE", "SENSORMV", "SENSOR_TYPE", "BATTMV", "PROGRAMMINGS", "SERVO_MEASURED", "SERVO_REQUESTED", "NUM_CYLINDERS", "CH1_MAXADVANCE", "CH2_MAXADVANCE", "CH3_MAXADVANCE", "CH4_MAXADVANCE", "DWELL_OPT", "DWELL", "RUNTIME", "PROP1", "PROP2", "PROP3", "PROP4", "RESPONSE_NUMBER", "CH1_ADVANCE", "CH2_ADVANCE", "CH3_ADVANCE", "CH4_ADVANCE", "LIMITER", "START_LIMITER", "RETARD", "CLUTCH_MASTER", "POWER_OUT", "FLAGS_V88_90", "FLAGS_V88_91", "FLAGS_V96_140", "FLAGS_V96_141", "FLAGS_V96_142", "FLAGS_V96_143", "FLAGS_V96_144", "FLAGS_V96_145", 0}; /*< Possible values for sweep. */
 const char *cmdline_parser_verbose_values[] = {"NONE", "ERROR", "WARN", "INFO", "DEBUG", 0}; /*< Possible values for verbose. */
 
 static char *
@@ -296,7 +297,7 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
   if (args_info->version_given)
     write_into_file(outfile, "version", 0, 0 );
   if (args_info->firmware_version_given)
-    write_into_file(outfile, "firmware-version", args_info->firmware_version_orig, 0);
+    write_into_file(outfile, "firmware-version", args_info->firmware_version_orig, cmdline_parser_firmware_version_values);
   if (args_info->pipe_name_given)
     write_into_file(outfile, "pipe-name", args_info->pipe_name_orig, 0);
   if (args_info->sweep_given)
@@ -697,7 +698,7 @@ cmdline_parser_internal (
         
           if (update_arg( (void *)&(args_info->firmware_version_arg), 
                &(args_info->firmware_version_orig), &(args_info->firmware_version_given),
-              &(local_args_info.firmware_version_given), optarg, 0, 0, ARG_INT,
+              &(local_args_info.firmware_version_given), optarg, cmdline_parser_firmware_version_values, 0, ARG_INT,
               check_ambiguity, override, 0, 0,
               "firmware-version", 'f',
               additional_error))

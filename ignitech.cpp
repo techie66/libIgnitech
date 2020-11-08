@@ -35,8 +35,8 @@ void IGNITECH::reset(bool force) {
 	if ( num_resets > IGNITECH_MAX_RESETS || force) {
 		ignition.rpm=0;
 		ignition.battery_mV=0;
-		ignition.map_mV=0;
-		ignition.map_kpa=0;
+		ignition.sensor_mV=0;
+		ignition.sensor_value=0;
 		num_resets = 0;
 		status = IGN_ERR;
 	}
@@ -248,18 +248,18 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 			status = IGN_SUC;
 			if ( version == VERSION_V88 ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
-				ignitech_data.map_mV = buf[4] + buf[5] * 0x100u;
+				ignitech_data.sensor_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.battery_mV = buf[6] + buf[7] * 0x100u;
-				ignitech_data.map_kpa = buf[22] + buf[23] *0x100u;
+				ignitech_data.sensor_value = buf[22] + buf[23] *0x100u;
 				// TODO check for fabs() with configure and enable contingently
-				if ( ignitech_data.map_kpa != 0 && fabs( running_map_ratio(ignitech_data) - ignitech_data.map_mV/(float)ignitech_data.map_kpa ) > 2 ) {
+				if ( ignitech_data.sensor_value != 0 && fabs( running_map_ratio(ignitech_data) - ignitech_data.sensor_mV/(float)ignitech_data.sensor_value ) > 2 ) {
 					status = IGN_BAD;
 				}
 			}
 			if ( version == VERSION_V96 ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
-				ignitech_data.map_mV = buf[4] + buf[5] * 0x100u;
-				ignitech_data.map_kpa = buf[6] + buf[7] *0x100u;
+				ignitech_data.sensor_mV = buf[4] + buf[5] * 0x100u;
+				ignitech_data.sensor_value = buf[6] + buf[7] *0x100u;
 				ignitech_data.battery_mV = buf[8] + buf[9] * 0x100u;
 				ignitech_data.programmings = buf[14] + buf[15] * 0x100u;
 				ignitech_data.advance_max_1_grad = buf[18] + buf[19] * 0x100u;
@@ -392,15 +392,15 @@ int IGNITECH::get_rpm() {
 /*
 	Simple Getter
 */
-int IGNITECH::get_map_kpa() {
-	return ignition.map_kpa;
+int IGNITECH::get_sensor_value() {
+	return ignition.sensor_value;
 }
 
 /*
 	Simple Getter
 */
-int IGNITECH::get_map_mV() {
-	return ignition.map_mV;
+int IGNITECH::get_sensor_mV() {
+	return ignition.sensor_mV;
 }
 
 /*
@@ -480,6 +480,8 @@ bool IGNITECH::packet_version_matches(unsigned char *buf, int length) {
 /*
 	Keep track of running ratio of map_mV to map_kpa
 	returns ratio
+	######### DEPRECATED #########
+	testing indicates this is not needed, there is bug
 */
 float IGNITECH::running_map_ratio( ignitech_t& ignitech_data ) {
 	// TODO actually calculate

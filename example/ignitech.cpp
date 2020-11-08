@@ -5,11 +5,11 @@
 #include <errno.h>
 
 int main() {
-	IGNITECH bike ("./virtual-tty");
+	IGNITECH bike ("virtual-tty");
 	//IGNITECH bike ("/dev/ignitech");
 	ignitech_t bike_status;
 	int read_status;
-	//bike.enable_raw_dump("dump.bin");
+	bike.enable_raw_dump("dump.bin");
 	bike.enable_debug();
 	while(1){
 	printf("Example passing our own ignitech_t struct.\n");
@@ -19,8 +19,8 @@ int main() {
 	}
 	else {
 		printf("RPM: %d\n",bike_status.rpm);
-		printf("MAP (kpa): %d\n",bike_status.map_kpa);
-		printf("MAP (mV): %d\n",bike_status.map_mV);
+		printf("MAP (kpa): %d\n",bike_status.sensor_value);
+		printf("MAP (mV): %d\n",bike_status.sensor_mV);
 		printf("Battery: %2.1f\n",(bike_status.battery_mV/1000.0));
 	}
 
@@ -31,8 +31,8 @@ int main() {
 	}
 	else {
 		printf("RPM: %d\n",bike.get_rpm());
-		printf("MAP (kpa): %d\n",bike.get_map_kpa());
-		printf("MAP (mV): %d\n",bike.get_map_mV());
+		printf("MAP (kpa): %d\n",bike.get_sensor_value());
+		printf("MAP (mV): %d\n",bike.get_sensor_mV());
 		printf("Battery: %2.1f\n",(bike.get_battery_mV()/1000.0));
 	}
 	usleep(1000000);

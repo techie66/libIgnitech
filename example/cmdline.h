@@ -34,7 +34,7 @@ extern "C" {
 #define CMDLINE_PARSER_VERSION "v0.1.0"
 #endif
 
-enum enum_sweep { sweep__NULL = -1, sweep_arg_RPM = 0, sweep_arg_SPEED, sweep_arg_MAPKPA, sweep_arg_MAPMV, sweep_arg_BATTMV, sweep_arg_PROGRAMMINGS, sweep_arg_SERVO_MEASURED, sweep_arg_CH1_MAXADVANCE, sweep_arg_CH2_MAXADVANCE, sweep_arg_CH3_MAXADVANCE, sweep_arg_CH4_MAXADVANCE, sweep_arg_DWELL_OPT, sweep_arg_DWELL, sweep_arg_RESPONSE_NUMBER, sweep_arg_CH1_ADVANCE, sweep_arg_CH2_ADVANCE, sweep_arg_CH3_ADVANCE, sweep_arg_CH4_ADVANCE, sweep_arg_FLAGS_51, sweep_arg_FLAGS_90, sweep_arg_FLAGS_91 };
+enum enum_sweep { sweep__NULL = -1, sweep_arg_RPM = 0, sweep_arg_SPEED, sweep_arg_SENSOR_VALUE, sweep_arg_SENSORMV, sweep_arg_SENSOR_TYPE, sweep_arg_BATTMV, sweep_arg_PROGRAMMINGS, sweep_arg_SERVO_MEASURED, sweep_arg_SERVO_REQUESTED, sweep_arg_NUM_CYLINDERS, sweep_arg_CH1_MAXADVANCE, sweep_arg_CH2_MAXADVANCE, sweep_arg_CH3_MAXADVANCE, sweep_arg_CH4_MAXADVANCE, sweep_arg_DWELL_OPT, sweep_arg_DWELL, sweep_arg_RUNTIME, sweep_arg_PROP1, sweep_arg_PROP2, sweep_arg_PROP3, sweep_arg_PROP4, sweep_arg_RESPONSE_NUMBER, sweep_arg_CH1_ADVANCE, sweep_arg_CH2_ADVANCE, sweep_arg_CH3_ADVANCE, sweep_arg_CH4_ADVANCE, sweep_arg_LIMITER, sweep_arg_START_LIMITER, sweep_arg_RETARD, sweep_arg_CLUTCH_MASTER, sweep_arg_POWER_OUT, sweep_arg_FLAGS_V88_90, sweep_arg_FLAGS_V88_91, sweep_arg_FLAGS_V96_140, sweep_arg_FLAGS_V96_141, sweep_arg_FLAGS_V96_142, sweep_arg_FLAGS_V96_143, sweep_arg_FLAGS_V96_144, sweep_arg_FLAGS_V96_145 };
 enum enum_verbose { verbose__NULL = -1, verbose_arg_NONE = 0, verbose_arg_ERROR, verbose_arg_WARN, verbose_arg_INFO, verbose_arg_DEBUG };
 
 /** @brief Where the command line options are stored */
@@ -205,6 +205,7 @@ void cmdline_parser_free (struct gengetopt_args_info *args_info);
 int cmdline_parser_required (struct gengetopt_args_info *args_info,
   const char *prog_name);
 
+extern const char *cmdline_parser_firmware_version_values[];  /**< @brief Possible values for firmware-version. */
 extern const char *cmdline_parser_sweep_values[];  /**< @brief Possible values for sweep. */
 extern const char *cmdline_parser_verbose_values[];  /**< @brief Possible values for verbose. */
 

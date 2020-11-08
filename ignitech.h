@@ -72,8 +72,8 @@ typedef enum IGN_async_status{
 struct ignitech_t{
 	uint16_t	rpm;
 	uint16_t	battery_mV;
-	uint16_t	map_mV;
-	uint16_t	map_kpa;
+	uint16_t	sensor_mV;
+	uint16_t	sensor_value;
 	uint16_t	programmings;
 	uint16_t	advance_max_1_grad;
 	uint16_t	advance_max_2_grad;
@@ -93,8 +93,8 @@ class IGNITECH {
 		IGN_async_status read_async( ignitech_t& ignitech_data );
 		IGN_async_status read_async( );
 		int get_rpm();
-		int get_map_kpa();
-		int get_map_mV();
+		int get_sensor_value();
+		int get_sensor_mV();
 		int get_battery_mV();
 		IGNITECH( char const *file );
 		IGNITECH( int fd );
