@@ -33,20 +33,43 @@ const char *gengetopt_args_info_versiontext = "";
 
 const char *gengetopt_args_info_description = "";
 
-const char *gengetopt_args_info_help[] = {
+const char *gengetopt_args_info_detailed_help[] = {
   "  -h, --help                    Print help and exit",
+  "      --detailed-help           Print help, including all details and hidden\n                                  options, and exit",
   "  -V, --version                 Print version and exit",
   "  -f, --firmware-version=88 or 96\n                                TCIP4 firmware version to emulate.  (possible\n                                  values=\"88\", \"96\")",
   "  -p, --pipe-name=filename      Filename of where a link to the virtual serial\n                                  port should be made.",
-  "  -s, --sweep=PARAMETER         Set parameter to sweep  (possible\n                                  values=\"RPM\", \"SPEED\", \"SENSOR_VALUE\",\n                                  \"SENSORMV\", \"SENSOR_TYPE\", \"BATTMV\",\n                                  \"PROGRAMMINGS\", \"SERVO_MEASURED\",\n                                  \"SERVO_REQUESTED\", \"NUM_CYLINDERS\",\n                                  \"CH1_MAXADVANCE\", \"CH2_MAXADVANCE\",\n                                  \"CH3_MAXADVANCE\", \"CH4_MAXADVANCE\",\n                                  \"DWELL_OPT\", \"DWELL\", \"RUNTIME\",\n                                  \"PROP1\", \"PROP2\", \"PROP3\", \"PROP4\",\n                                  \"RESPONSE_NUMBER\", \"CH1_ADVANCE\",\n                                  \"CH2_ADVANCE\", \"CH3_ADVANCE\",\n                                  \"CH4_ADVANCE\", \"LIMITER\",\n                                  \"START_LIMITER\", \"RETARD\",\n                                  \"CLUTCH_MASTER\", \"POWER_OUT\",\n                                  \"FLAGS_V88_90\", \"FLAGS_V88_91\",\n                                  \"FLAGS_V96_140\", \"FLAGS_V96_141\",\n                                  \"FLAGS_V96_142\", \"FLAGS_V96_143\",\n                                  \"FLAGS_V96_144\", \"FLAGS_V96_145\"\n                                  default=`RPM')",
   "  -d, --data-file=filename      Data file in binary form. File must contain\n                                  properly sized packets. If this is specified,\n                                  '--sweep' is ignored.",
   "  -i, --interactive             User input required to change output packet.",
   "  -x, --hex-output              Output a HEX representation of each packet\n                                  sent.",
   "  -v, --v                       Verbose output. Specify multiple times for\n                                  increasing verbosity.",
   "      --verbose=VERBOSITY       Set level of verbosity explicitly. \n                                  (Overrides -v)\n                                    (possible values=\"NONE\", \"ERROR\",\n                                  \"WARN\", \"INFO\", \"DEBUG\"\n                                  default=`DEBUG')",
   "  -q, --quiet                   Suppress output. Same as --verbose=NONE\n                                  (Overrides both -v and --verbose)",
+  "  -s, --sweep=PARAMETER         Set parameter to sweep  (possible\n                                  values=\"RPM\", \"SENSOR_VALUE\",\n                                  \"SENSORMV\", \"SENSOR_TYPE\", \"BATTMV\",\n                                  \"PROGRAMMINGS\", \"SERVO_MEASURED\",\n                                  \"SERVO_REQUESTED\", \"NUM_CYLINDERS\",\n                                  \"CH1_MAXADVANCE\", \"CH2_MAXADVANCE\",\n                                  \"CH3_MAXADVANCE\", \"CH4_MAXADVANCE\",\n                                  \"DWELL_OPT\", \"DWELL\", \"RUNTIME\",\n                                  \"PROP1\", \"PROP2\", \"PROP3\", \"PROP4\",\n                                  \"RESPONSE_NUMBER\", \"CH1_ADVANCE\",\n                                  \"CH2_ADVANCE\", \"CH3_ADVANCE\",\n                                  \"CH4_ADVANCE\", \"LIMITER\",\n                                  \"START_LIMITER\", \"RETARD\",\n                                  \"CLUTCH_MASTER\", \"POWER_OUT\",\n                                  \"FLAGS_V88_90\", \"FLAGS_V88_91\",\n                                  \"FLAGS_V96_140\", \"FLAGS_V96_141\",\n                                  \"FLAGS_V96_142\", \"FLAGS_V96_143\",\n                                  \"FLAGS_V96_144\", \"FLAGS_V96_145\"\n                                  default=`RPM')",
+  "  All options will loop indefinitely:\n  Any options that are only for V88 or V96 will do nothing if the other version\n  is selected.\n  RPM                Sweeps RPM values from 0 to 65535\n  SENSOR_VALUE       Sweeps values in sensor data from 0 to 65535\n  SENSOMV            Sweeps mV value of sensor from 0 to 65535\n  SENSOR_TYPE        Cycles through None, TPS, IAP\n  BATTMV             Sweeps mV value of battery from 0 to 65535\n  PROGRAMMINGS       Sweeps number of programmings from 0 to 65535\n  SERVO_MEASURED     Sweeps mV value measured from servo from 0 to 65535\n  SERVO_REQUESTED    Sweeps mV value requested from servo from 0 to 65535\n  NUM_CYLINDERS    -V96 Only- Sweeps number of cylinders from 0 to 4\n  CH1_MAXADVANCE     Sweeps Max Advance for Channel 1 from 0 to 65535\n  CH2_MAXADVANCE     Sweeps Max Advance for Channel 2 from 0 to 65535\n  CH3_MAXADVANCE     Sweeps Max Advance for Channel 3 from 0 to 65535\n  CH4_MAXADVANCE     Sweeps Max Advance for Channel 4 from 0 to 65535\n  DWELL_OPT          Sweeps Optimal dwell from 0 to 65535\n  DWELL              Sweeps actual dwell from 0 to 65535\n  RUNTIME          -V96 Only- Sweeps minutes of runtime from 0 to 65535\n  PROP1\n  	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535\n  PROP2\n  	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535\n  PROP3\n  	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535\n  PROP4\n  	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535\n  RESPONSE_NUMBER    Sweeps the response number counter from 0 to 65535\n  CH1_ADVANCE\n  	Sweeps actual advance starting with 'Base Advance' then -99 to 35435\n  CH2_ADVANCE\n  	Sweeps actual advance starting with 'Base Advance' then -99 to 35435\n  CH3_ADVANCE\n  	Sweeps actual advance starting with 'Base Advance' then -99 to 35435\n  CH4_ADVANCE\n  	Sweeps actual advance starting with 'Base Advance' then -99 to 35435\n  LIMITER          -V88 Only- Toggles RPM Limiter flag on and off\n  START_LIMITER    -V88 Only- Toggles Start_Limiter flag on and off \n  RETARD           -V88 Only- Toggles Retard flag on and off\n  CLUTCH_MASTER    -V88 Only- Toggles Clutch Master flag on and off\n  POWER_OUT          Cycle through 1 ON, 2 ON, Both ON\n  FLAGS_V88_90     -V88 Only- Cycles each flag one at a time\n  FLAGS_V88_91     -V88 Only- Cycles each flag one at a time\n  FLAGS_V96_140    -V96 Only- Cycles each flag one at a time\n  FLAGS_V96_141    -V96 Only- Cycles each flag one at a time\n  FLAGS_V96_142    -V96 Only- Cycles each flag one at a time\n  FLAGS_V96_143    -V96 Only- Cycles each flag one at a time\n  FLAGS_V96_144    -V96 Only- Cycles each flag one at a time\n  FLAGS_V96_145    -V96 Only- Cycles each flag one at a time\n  		",
     0
 };
+
+static void
+init_help_array(void)
+{
+  gengetopt_args_info_help[0] = gengetopt_args_info_detailed_help[0];
+  gengetopt_args_info_help[1] = gengetopt_args_info_detailed_help[1];
+  gengetopt_args_info_help[2] = gengetopt_args_info_detailed_help[2];
+  gengetopt_args_info_help[3] = gengetopt_args_info_detailed_help[3];
+  gengetopt_args_info_help[4] = gengetopt_args_info_detailed_help[4];
+  gengetopt_args_info_help[5] = gengetopt_args_info_detailed_help[5];
+  gengetopt_args_info_help[6] = gengetopt_args_info_detailed_help[6];
+  gengetopt_args_info_help[7] = gengetopt_args_info_detailed_help[7];
+  gengetopt_args_info_help[8] = gengetopt_args_info_detailed_help[8];
+  gengetopt_args_info_help[9] = gengetopt_args_info_detailed_help[9];
+  gengetopt_args_info_help[10] = gengetopt_args_info_detailed_help[10];
+  gengetopt_args_info_help[11] = gengetopt_args_info_detailed_help[11];
+  gengetopt_args_info_help[12] = 0; 
+  
+}
+
+const char *gengetopt_args_info_help[13];
 
 typedef enum {ARG_NO
   , ARG_STRING
@@ -67,8 +90,8 @@ static int
 cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
 const char *cmdline_parser_firmware_version_values[] = {"88", "96", 0}; /*< Possible values for firmware-version. */
-const char *cmdline_parser_sweep_values[] = {"RPM", "SPEED", "SENSOR_VALUE", "SENSORMV", "SENSOR_TYPE", "BATTMV", "PROGRAMMINGS", "SERVO_MEASURED", "SERVO_REQUESTED", "NUM_CYLINDERS", "CH1_MAXADVANCE", "CH2_MAXADVANCE", "CH3_MAXADVANCE", "CH4_MAXADVANCE", "DWELL_OPT", "DWELL", "RUNTIME", "PROP1", "PROP2", "PROP3", "PROP4", "RESPONSE_NUMBER", "CH1_ADVANCE", "CH2_ADVANCE", "CH3_ADVANCE", "CH4_ADVANCE", "LIMITER", "START_LIMITER", "RETARD", "CLUTCH_MASTER", "POWER_OUT", "FLAGS_V88_90", "FLAGS_V88_91", "FLAGS_V96_140", "FLAGS_V96_141", "FLAGS_V96_142", "FLAGS_V96_143", "FLAGS_V96_144", "FLAGS_V96_145", 0}; /*< Possible values for sweep. */
 const char *cmdline_parser_verbose_values[] = {"NONE", "ERROR", "WARN", "INFO", "DEBUG", 0}; /*< Possible values for verbose. */
+const char *cmdline_parser_sweep_values[] = {"RPM", "SENSOR_VALUE", "SENSORMV", "SENSOR_TYPE", "BATTMV", "PROGRAMMINGS", "SERVO_MEASURED", "SERVO_REQUESTED", "NUM_CYLINDERS", "CH1_MAXADVANCE", "CH2_MAXADVANCE", "CH3_MAXADVANCE", "CH4_MAXADVANCE", "DWELL_OPT", "DWELL", "RUNTIME", "PROP1", "PROP2", "PROP3", "PROP4", "RESPONSE_NUMBER", "CH1_ADVANCE", "CH2_ADVANCE", "CH3_ADVANCE", "CH4_ADVANCE", "LIMITER", "START_LIMITER", "RETARD", "CLUTCH_MASTER", "POWER_OUT", "FLAGS_V88_90", "FLAGS_V88_91", "FLAGS_V96_140", "FLAGS_V96_141", "FLAGS_V96_142", "FLAGS_V96_143", "FLAGS_V96_144", "FLAGS_V96_145", 0}; /*< Possible values for sweep. */
 
 static char *
 gengetopt_strdup (const char *s);
@@ -77,16 +100,17 @@ static
 void clear_given (struct gengetopt_args_info *args_info)
 {
   args_info->help_given = 0 ;
+  args_info->detailed_help_given = 0 ;
   args_info->version_given = 0 ;
   args_info->firmware_version_given = 0 ;
   args_info->pipe_name_given = 0 ;
-  args_info->sweep_given = 0 ;
   args_info->data_file_given = 0 ;
   args_info->interactive_given = 0 ;
   args_info->hex_output_given = 0 ;
   args_info->v_given = 0 ;
   args_info->verbose_given = 0 ;
   args_info->quiet_given = 0 ;
+  args_info->sweep_given = 0 ;
 }
 
 static
@@ -96,12 +120,12 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->firmware_version_orig = NULL;
   args_info->pipe_name_arg = NULL;
   args_info->pipe_name_orig = NULL;
-  args_info->sweep_arg = sweep_arg_RPM;
-  args_info->sweep_orig = NULL;
   args_info->data_file_arg = NULL;
   args_info->data_file_orig = NULL;
   args_info->verbose_arg = verbose_arg_DEBUG;
   args_info->verbose_orig = NULL;
+  args_info->sweep_arg = sweep_arg_RPM;
+  args_info->sweep_orig = NULL;
   
 }
 
@@ -109,20 +133,21 @@ static
 void init_args_info(struct gengetopt_args_info *args_info)
 {
 
-
-  args_info->help_help = gengetopt_args_info_help[0] ;
-  args_info->version_help = gengetopt_args_info_help[1] ;
-  args_info->firmware_version_help = gengetopt_args_info_help[2] ;
-  args_info->pipe_name_help = gengetopt_args_info_help[3] ;
-  args_info->sweep_help = gengetopt_args_info_help[4] ;
-  args_info->data_file_help = gengetopt_args_info_help[5] ;
-  args_info->interactive_help = gengetopt_args_info_help[6] ;
-  args_info->hex_output_help = gengetopt_args_info_help[7] ;
-  args_info->v_help = gengetopt_args_info_help[8] ;
+  init_help_array(); 
+  args_info->help_help = gengetopt_args_info_detailed_help[0] ;
+  args_info->detailed_help_help = gengetopt_args_info_detailed_help[1] ;
+  args_info->version_help = gengetopt_args_info_detailed_help[2] ;
+  args_info->firmware_version_help = gengetopt_args_info_detailed_help[3] ;
+  args_info->pipe_name_help = gengetopt_args_info_detailed_help[4] ;
+  args_info->data_file_help = gengetopt_args_info_detailed_help[5] ;
+  args_info->interactive_help = gengetopt_args_info_detailed_help[6] ;
+  args_info->hex_output_help = gengetopt_args_info_detailed_help[7] ;
+  args_info->v_help = gengetopt_args_info_detailed_help[8] ;
   args_info->v_min = 1;
   args_info->v_max = 3;
-  args_info->verbose_help = gengetopt_args_info_help[9] ;
-  args_info->quiet_help = gengetopt_args_info_help[10] ;
+  args_info->verbose_help = gengetopt_args_info_detailed_help[9] ;
+  args_info->quiet_help = gengetopt_args_info_detailed_help[10] ;
+  args_info->sweep_help = gengetopt_args_info_detailed_help[11] ;
   
 }
 
@@ -159,6 +184,15 @@ cmdline_parser_print_help (void)
   print_help_common();
   while (gengetopt_args_info_help[i])
     printf("%s\n", gengetopt_args_info_help[i++]);
+}
+
+void
+cmdline_parser_print_detailed_help (void)
+{
+  int i = 0;
+  print_help_common();
+  while (gengetopt_args_info_detailed_help[i])
+    printf("%s\n", gengetopt_args_info_detailed_help[i++]);
 }
 
 void
@@ -209,10 +243,10 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->firmware_version_orig));
   free_string_field (&(args_info->pipe_name_arg));
   free_string_field (&(args_info->pipe_name_orig));
-  free_string_field (&(args_info->sweep_orig));
   free_string_field (&(args_info->data_file_arg));
   free_string_field (&(args_info->data_file_orig));
   free_string_field (&(args_info->verbose_orig));
+  free_string_field (&(args_info->sweep_orig));
   
   
 
@@ -294,14 +328,14 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
 
   if (args_info->help_given)
     write_into_file(outfile, "help", 0, 0 );
+  if (args_info->detailed_help_given)
+    write_into_file(outfile, "detailed-help", 0, 0 );
   if (args_info->version_given)
     write_into_file(outfile, "version", 0, 0 );
   if (args_info->firmware_version_given)
     write_into_file(outfile, "firmware-version", args_info->firmware_version_orig, cmdline_parser_firmware_version_values);
   if (args_info->pipe_name_given)
     write_into_file(outfile, "pipe-name", args_info->pipe_name_orig, 0);
-  if (args_info->sweep_given)
-    write_into_file(outfile, "sweep", args_info->sweep_orig, cmdline_parser_sweep_values);
   if (args_info->data_file_given)
     write_into_file(outfile, "data-file", args_info->data_file_orig, 0);
   if (args_info->interactive_given)
@@ -313,6 +347,8 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "verbose", args_info->verbose_orig, cmdline_parser_verbose_values);
   if (args_info->quiet_given)
     write_into_file(outfile, "quiet", 0, 0 );
+  if (args_info->sweep_given)
+    write_into_file(outfile, "sweep", args_info->sweep_orig, cmdline_parser_sweep_values);
   
 
   i = EXIT_SUCCESS;
@@ -664,20 +700,21 @@ cmdline_parser_internal (
 
       static struct option long_options[] = {
         { "help",	0, NULL, 'h' },
+        { "detailed-help",	0, NULL, 0 },
         { "version",	0, NULL, 'V' },
         { "firmware-version",	1, NULL, 'f' },
         { "pipe-name",	1, NULL, 'p' },
-        { "sweep",	1, NULL, 's' },
         { "data-file",	1, NULL, 'd' },
         { "interactive",	0, NULL, 'i' },
         { "hex-output",	0, NULL, 'x' },
         { "v",	0, NULL, 'v' },
         { "verbose",	1, NULL, 0 },
         { "quiet",	0, NULL, 'q' },
+        { "sweep",	1, NULL, 's' },
         { 0,  0, 0, 0 }
       };
 
-      c = getopt_long (argc, argv, "hVf:p:s:d:ixvq", long_options, &option_index);
+      c = getopt_long (argc, argv, "hVf:p:d:ixvqs:", long_options, &option_index);
 
       if (c == -1) break;	/* Exit from `while (1)' loop.  */
 
@@ -713,18 +750,6 @@ cmdline_parser_internal (
               &(local_args_info.pipe_name_given), optarg, 0, 0, ARG_STRING,
               check_ambiguity, override, 0, 0,
               "pipe-name", 'p',
-              additional_error))
-            goto failure;
-        
-          break;
-        case 's':	/* Set parameter to sweep.  */
-        
-        
-          if (update_arg( (void *)&(args_info->sweep_arg), 
-               &(args_info->sweep_orig), &(args_info->sweep_given),
-              &(local_args_info.sweep_given), optarg, cmdline_parser_sweep_values, "RPM", ARG_ENUM,
-              check_ambiguity, override, 0, 0,
-              "sweep", 's',
               additional_error))
             goto failure;
         
@@ -782,8 +807,26 @@ cmdline_parser_internal (
             goto failure;
         
           break;
+        case 's':	/* Set parameter to sweep.  */
+        
+        
+          if (update_arg( (void *)&(args_info->sweep_arg), 
+               &(args_info->sweep_orig), &(args_info->sweep_given),
+              &(local_args_info.sweep_given), optarg, cmdline_parser_sweep_values, "RPM", ARG_ENUM,
+              check_ambiguity, override, 0, 0,
+              "sweep", 's',
+              additional_error))
+            goto failure;
+        
+          break;
 
         case 0:	/* Long option with no short option */
+          if (strcmp (long_options[option_index].name, "detailed-help") == 0) {
+            cmdline_parser_print_detailed_help ();
+            cmdline_parser_free (&local_args_info);
+            exit (EXIT_SUCCESS);
+          }
+
           /* Set level of verbosity explicitly. 
           (Overrides -v)
 .  */

@@ -1,13 +1,17 @@
 package "TCIP4 Emulator"
-version "v0.1.0"
 args "--func-name=cmdline_parser"
 
 
 option "firmware-version"	f "TCIP4 firmware version to emulate." int typestr="88 or 96" values="88","96" required
 option "pipe-name"	p "Filename of where a link to the virtual serial port should be made." string typestr="filename" optional 
+option "data-file"	d "Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored." string typestr="filename" optional
+option "interactive" i "User input required to change output packet." optional
+option "hex-output" x "Output a HEX representation of each packet sent." optional
+option "v"		v "Verbose output. Specify multiple times for increasing verbosity." optional multiple(1-3)
+option "verbose"	- "Set level of verbosity explicitly. \n(Overrides -v)\n" enum typestr="VERBOSITY" values="NONE","ERROR","WARN","INFO","DEBUG" default="DEBUG" optional
+option "quiet"		q "Suppress output. Same as --verbose=NONE (Overrides both -v and --verbose)" optional
 option "sweep"	s "Set parameter to sweep" enum typestr="PARAMETER" 
 	values="RPM",
-		"SPEED",
 		"SENSOR_VALUE",
 		"SENSORMV",
 		"SENSOR_TYPE",
@@ -46,9 +50,52 @@ option "sweep"	s "Set parameter to sweep" enum typestr="PARAMETER"
 		"FLAGS_V96_144",
 		"FLAGS_V96_145"
 	default="RPM" optional
-option "data-file"	d "Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored." string typestr="filename" optional
-option "interactive" i "User input required to change output packet." optional
-option "hex-output" x "Output a HEX representation of each packet sent." optional
-option "v"		v "Verbose output. Specify multiple times for increasing verbosity." optional multiple(1-3)
-option "verbose"	- "Set level of verbosity explicitly. \n(Overrides -v)\n" enum typestr="VERBOSITY" values="NONE","ERROR","WARN","INFO","DEBUG" default="DEBUG" optional
-option "quiet"		q "Suppress output. Same as --verbose=NONE (Overrides both -v and --verbose)" optional
+	details="All options will loop indefinitely:
+Any options that are only for V88 or V96 will do nothing if the other version is selected.
+RPM                Sweeps RPM values from 0 to 65535
+SENSOR_VALUE       Sweeps values in sensor data from 0 to 65535
+SENSOMV            Sweeps mV value of sensor from 0 to 65535
+SENSOR_TYPE        Cycles through None, TPS, IAP
+BATTMV             Sweeps mV value of battery from 0 to 65535
+PROGRAMMINGS       Sweeps number of programmings from 0 to 65535
+SERVO_MEASURED     Sweeps mV value measured from servo from 0 to 65535
+SERVO_REQUESTED    Sweeps mV value requested from servo from 0 to 65535
+NUM_CYLINDERS    -V96 Only- Sweeps number of cylinders from 0 to 4
+CH1_MAXADVANCE     Sweeps Max Advance for Channel 1 from 0 to 65535
+CH2_MAXADVANCE     Sweeps Max Advance for Channel 2 from 0 to 65535
+CH3_MAXADVANCE     Sweeps Max Advance for Channel 3 from 0 to 65535
+CH4_MAXADVANCE     Sweeps Max Advance for Channel 4 from 0 to 65535
+DWELL_OPT          Sweeps Optimal dwell from 0 to 65535
+DWELL              Sweeps actual dwell from 0 to 65535
+RUNTIME          -V96 Only- Sweeps minutes of runtime from 0 to 65535
+PROP1
+	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535
+PROP2
+	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535
+PROP3
+	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535
+PROP4
+	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535
+RESPONSE_NUMBER    Sweeps the response number counter from 0 to 65535
+CH1_ADVANCE
+	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
+CH2_ADVANCE
+	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
+CH3_ADVANCE
+	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
+CH4_ADVANCE
+	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
+LIMITER          -V88 Only- Toggles RPM Limiter flag on and off
+START_LIMITER    -V88 Only- Toggles Start_Limiter flag on and off 
+RETARD           -V88 Only- Toggles Retard flag on and off
+CLUTCH_MASTER    -V88 Only- Toggles Clutch Master flag on and off
+POWER_OUT          Cycle through 1 ON, 2 ON, Both ON
+FLAGS_V88_90     -V88 Only- Cycles each flag one at a time
+FLAGS_V88_91     -V88 Only- Cycles each flag one at a time
+FLAGS_V96_140    -V96 Only- Cycles each flag one at a time
+FLAGS_V96_141    -V96 Only- Cycles each flag one at a time
+FLAGS_V96_142    -V96 Only- Cycles each flag one at a time
+FLAGS_V96_143    -V96 Only- Cycles each flag one at a time
+FLAGS_V96_144    -V96 Only- Cycles each flag one at a time
+FLAGS_V96_145    -V96 Only- Cycles each flag one at a time
+		"

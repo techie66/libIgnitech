@@ -31,16 +31,17 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_VERSION
 /** @brief the program version */
-#define CMDLINE_PARSER_VERSION "v0.1.0"
+#define CMDLINE_PARSER_VERSION VERSION
 #endif
 
-enum enum_sweep { sweep__NULL = -1, sweep_arg_RPM = 0, sweep_arg_SPEED, sweep_arg_SENSOR_VALUE, sweep_arg_SENSORMV, sweep_arg_SENSOR_TYPE, sweep_arg_BATTMV, sweep_arg_PROGRAMMINGS, sweep_arg_SERVO_MEASURED, sweep_arg_SERVO_REQUESTED, sweep_arg_NUM_CYLINDERS, sweep_arg_CH1_MAXADVANCE, sweep_arg_CH2_MAXADVANCE, sweep_arg_CH3_MAXADVANCE, sweep_arg_CH4_MAXADVANCE, sweep_arg_DWELL_OPT, sweep_arg_DWELL, sweep_arg_RUNTIME, sweep_arg_PROP1, sweep_arg_PROP2, sweep_arg_PROP3, sweep_arg_PROP4, sweep_arg_RESPONSE_NUMBER, sweep_arg_CH1_ADVANCE, sweep_arg_CH2_ADVANCE, sweep_arg_CH3_ADVANCE, sweep_arg_CH4_ADVANCE, sweep_arg_LIMITER, sweep_arg_START_LIMITER, sweep_arg_RETARD, sweep_arg_CLUTCH_MASTER, sweep_arg_POWER_OUT, sweep_arg_FLAGS_V88_90, sweep_arg_FLAGS_V88_91, sweep_arg_FLAGS_V96_140, sweep_arg_FLAGS_V96_141, sweep_arg_FLAGS_V96_142, sweep_arg_FLAGS_V96_143, sweep_arg_FLAGS_V96_144, sweep_arg_FLAGS_V96_145 };
 enum enum_verbose { verbose__NULL = -1, verbose_arg_NONE = 0, verbose_arg_ERROR, verbose_arg_WARN, verbose_arg_INFO, verbose_arg_DEBUG };
+enum enum_sweep { sweep__NULL = -1, sweep_arg_RPM = 0, sweep_arg_SENSOR_VALUE, sweep_arg_SENSORMV, sweep_arg_SENSOR_TYPE, sweep_arg_BATTMV, sweep_arg_PROGRAMMINGS, sweep_arg_SERVO_MEASURED, sweep_arg_SERVO_REQUESTED, sweep_arg_NUM_CYLINDERS, sweep_arg_CH1_MAXADVANCE, sweep_arg_CH2_MAXADVANCE, sweep_arg_CH3_MAXADVANCE, sweep_arg_CH4_MAXADVANCE, sweep_arg_DWELL_OPT, sweep_arg_DWELL, sweep_arg_RUNTIME, sweep_arg_PROP1, sweep_arg_PROP2, sweep_arg_PROP3, sweep_arg_PROP4, sweep_arg_RESPONSE_NUMBER, sweep_arg_CH1_ADVANCE, sweep_arg_CH2_ADVANCE, sweep_arg_CH3_ADVANCE, sweep_arg_CH4_ADVANCE, sweep_arg_LIMITER, sweep_arg_START_LIMITER, sweep_arg_RETARD, sweep_arg_CLUTCH_MASTER, sweep_arg_POWER_OUT, sweep_arg_FLAGS_V88_90, sweep_arg_FLAGS_V88_91, sweep_arg_FLAGS_V96_140, sweep_arg_FLAGS_V96_141, sweep_arg_FLAGS_V96_142, sweep_arg_FLAGS_V96_143, sweep_arg_FLAGS_V96_144, sweep_arg_FLAGS_V96_145 };
 
 /** @brief Where the command line options are stored */
 struct gengetopt_args_info
 {
   const char *help_help; /**< @brief Print help and exit help description.  */
+  const char *detailed_help_help; /**< @brief Print help, including all details and hidden options, and exit help description.  */
   const char *version_help; /**< @brief Print version and exit help description.  */
   int firmware_version_arg;	/**< @brief TCIP4 firmware version to emulate..  */
   char * firmware_version_orig;	/**< @brief TCIP4 firmware version to emulate. original value given at command line.  */
@@ -48,9 +49,6 @@ struct gengetopt_args_info
   char * pipe_name_arg;	/**< @brief Filename of where a link to the virtual serial port should be made..  */
   char * pipe_name_orig;	/**< @brief Filename of where a link to the virtual serial port should be made. original value given at command line.  */
   const char *pipe_name_help; /**< @brief Filename of where a link to the virtual serial port should be made. help description.  */
-  enum enum_sweep sweep_arg;	/**< @brief Set parameter to sweep (default='RPM').  */
-  char * sweep_orig;	/**< @brief Set parameter to sweep original value given at command line.  */
-  const char *sweep_help; /**< @brief Set parameter to sweep help description.  */
   char * data_file_arg;	/**< @brief Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored..  */
   char * data_file_orig;	/**< @brief Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored. original value given at command line.  */
   const char *data_file_help; /**< @brief Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored. help description.  */
@@ -69,18 +67,22 @@ struct gengetopt_args_info
   (Overrides -v)
  help description.  */
   const char *quiet_help; /**< @brief Suppress output. Same as --verbose=NONE (Overrides both -v and --verbose) help description.  */
+  enum enum_sweep sweep_arg;	/**< @brief Set parameter to sweep (default='RPM').  */
+  char * sweep_orig;	/**< @brief Set parameter to sweep original value given at command line.  */
+  const char *sweep_help; /**< @brief Set parameter to sweep help description.  */
   
   unsigned int help_given ;	/**< @brief Whether help was given.  */
+  unsigned int detailed_help_given ;	/**< @brief Whether detailed-help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
   unsigned int firmware_version_given ;	/**< @brief Whether firmware-version was given.  */
   unsigned int pipe_name_given ;	/**< @brief Whether pipe-name was given.  */
-  unsigned int sweep_given ;	/**< @brief Whether sweep was given.  */
   unsigned int data_file_given ;	/**< @brief Whether data-file was given.  */
   unsigned int interactive_given ;	/**< @brief Whether interactive was given.  */
   unsigned int hex_output_given ;	/**< @brief Whether hex-output was given.  */
   unsigned int v_given ;	/**< @brief Whether v was given.  */
   unsigned int verbose_given ;	/**< @brief Whether verbose was given.  */
   unsigned int quiet_given ;	/**< @brief Whether quiet was given.  */
+  unsigned int sweep_given ;	/**< @brief Whether sweep was given.  */
 
 } ;
 
@@ -102,6 +104,8 @@ extern const char *gengetopt_args_info_usage;
 extern const char *gengetopt_args_info_description;
 /** @brief all the lines making the help output */
 extern const char *gengetopt_args_info_help[];
+/** @brief all the lines making the detailed help output (including hidden options and details) */
+extern const char *gengetopt_args_info_detailed_help[];
 
 /**
  * The command line parser
@@ -164,6 +168,10 @@ int cmdline_parser_file_save(const char *filename,
  */
 void cmdline_parser_print_help(void);
 /**
+ * Print the detailed help (including hidden options and details)
+ */
+void cmdline_parser_print_detailed_help(void);
+/**
  * Print the version
  */
 void cmdline_parser_print_version(void);
@@ -206,8 +214,8 @@ int cmdline_parser_required (struct gengetopt_args_info *args_info,
   const char *prog_name);
 
 extern const char *cmdline_parser_firmware_version_values[];  /**< @brief Possible values for firmware-version. */
-extern const char *cmdline_parser_sweep_values[];  /**< @brief Possible values for sweep. */
 extern const char *cmdline_parser_verbose_values[];  /**< @brief Possible values for verbose. */
+extern const char *cmdline_parser_sweep_values[];  /**< @brief Possible values for sweep. */
 
 
 #ifdef __cplusplus
