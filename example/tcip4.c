@@ -332,6 +332,9 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 			}
 			packet[0] = 0xb0;
 			packet[1] = 0xFF;
+			packet[110] = 0x04;
+			packet[111] = 0x03;
+			packet[145] = 0x30;
 			packet[114] = 0x6c; // dwell calibration
 			packet[119] = 0x04; // 4 cylinders
 			packet[143] = 0x3f; // all input options enabled
@@ -357,12 +360,12 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 				packet[9] = msb;
 				break;
 			case sweep_arg_SERVO_MEASURED:
-				//packet[8] = lsb;
-				//packet[9] = msb;
+				packet[10] = lsb;
+				packet[11] = msb;
 				break;
 			case sweep_arg_SERVO_REQUESTED:
-				//packet[10] = lsb;
-				//packet[11] = msb;
+				packet[12] = lsb;
+				packet[13] = msb;
 				break;
 			case sweep_arg_PROGRAMMINGS:
 				packet[14] = lsb;
