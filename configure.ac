@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([IGNITECH], [0.2], [BUG-REPORT-ADDRESS])
+AC_INIT([IGNITECH], [0.2], [https://github.com/techie66/libIgnitech/issues])
 AC_CONFIG_SRCDIR([src/ignitech.cpp])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([subdir-objects])
