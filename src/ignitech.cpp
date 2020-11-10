@@ -73,7 +73,7 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 	static size_t total_read = 0;
 	static size_t packet_size = IGNITECH_PACKET_SIZE_V88;
 
-	if ( time(0) > reset_last_read + reset_timeout ) {
+	if ( time(NULL) > reset_last_read + reset_timeout ) {
 		// No response for timeout, reset
 		if ( DEBUG_IGNITECH ) {
 			perror ( "IGNITECH::read_async: No response from controller within timeout. Resetting.");
