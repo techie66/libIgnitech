@@ -20,7 +20,7 @@
 #include "serial.h"
 
 int
-set_interface_attribs (int fd, int speed, int parity) {
+IG_set_interface_attribs (int fd, int speed, int parity) {
 	struct termios tty;
 	memset (&tty, 0, sizeof tty);
 	if (tcgetattr (fd, &tty) != 0) {
