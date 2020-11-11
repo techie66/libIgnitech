@@ -33,21 +33,19 @@ set_interface_attribs (int fd, int speed, int parity) {
 /*
  *
  * FOR TCIP-4 stty output needs to be:
- * speed 57600 baud; line = 0;
+speed 57600 baud; line = 0;
 min = 0; time = 0;
 ignbrk -brkint -icrnl -imaxbel
 -opost
 -isig -icanon -iexten -echo noflsh
 
-	tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;	// 8-bit chars
-	tty.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-	tty.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
-	tty.c_oflag &= ~(OPOST);
-
-	tty.c_iflag &= ~(IXON | IXOFF | IXANY);	// shut off xon/xoff ctrl
 */
 
 	cfmakeraw(&tty);
+	/* Specific for TCIP-4 */
+	tty.c_lflag |= NOFLSH;
+	tty.c_iflag |= IGNBRK;
+	/* END TCIP-4 Specific */
 	tty.c_cc[VMIN]  = 0;		// read doesn't wait for min bytes
 	tty.c_cc[VTIME] = 5;		// 0.5 seconds read timeout
 	tty.c_cflag &= ~CSTOPB;
