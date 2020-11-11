@@ -31,6 +31,14 @@ set_interface_attribs (int fd, int speed, int parity) {
 	cfsetispeed (&tty, speed);
 
 /*
+ *
+ * FOR TCIP-4 stty output needs to be:
+ * speed 57600 baud; line = 0;
+min = 0; time = 0;
+ignbrk -brkint -icrnl -imaxbel
+-opost
+-isig -icanon -iexten -echo noflsh
+
 	tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;	// 8-bit chars
 	tty.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
 	tty.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
