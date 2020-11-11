@@ -290,7 +290,7 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 			total_read = 0;
 			found_header = false;
 			buf[0] = 0;
-			return IGN_ERR;
+			return IGN_BAD;
 		}
 	}
 	else
