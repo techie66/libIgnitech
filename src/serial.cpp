@@ -40,6 +40,14 @@ ignbrk -brkint -icrnl -imaxbel
 -opost
 -isig -icanon -iexten -echo noflsh
 
+OR MAYBE
+speed 57600 baud; line = 0;
+intr = <undef>; quit = <undef>; erase = <undef>; kill = <undef>; eof = <undef>; start = <undef>; stop = <undef>; susp = <undef>;
+rprnt = <undef>; werase = <undef>; lnext = <undef>; discard = <undef>; min = 1; time = 0;
+ignbrk -brkint -icrnl -imaxbel
+-opost -onlcr
+-isig -icanon -iexten -echo -echoe -echok -echoctl -echoke
+
 */
 
 	cfmakeraw(&tty);
