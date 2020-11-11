@@ -17,10 +17,11 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "ignitech.h"
 #include "serial.h"
 
 int
-IG_set_interface_attribs (int fd, int speed, int parity) {
+IGNITECH::set_interface_attribs (int fd, int speed, int parity) {
 	struct termios tty;
 	memset (&tty, 0, sizeof tty);
 	if (tcgetattr (fd, &tty) != 0) {

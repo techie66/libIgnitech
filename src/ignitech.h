@@ -37,6 +37,9 @@ API for libIgnitech
 #include <string.h>
 #include <stddef.h>
 #include <time.h>
+#include <fcntl.h>
+#include <termios.h>
+
 
 #define IGNITECH_BOGUS 0x3000
 #define IGNITECH_PACKET_SIZE_V88 102
@@ -112,6 +115,7 @@ class IGNITECH {
 		bool checksum_is_good(unsigned char *buf, int length);
 		bool packet_version_matches(unsigned char *buf, int length);
 		float running_map_ratio( ignitech_t& ignitech_data );
+		int set_interface_attribs (int fd, int speed, int parity);
 		int file_descriptor;
 		ignitech_t ignition;
 		bool isArduino;

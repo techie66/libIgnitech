@@ -359,8 +359,8 @@ int IGNITECH::open_device() {
 	}
 
 	// Set interface parameters for front controls
-	IG_set_interface_attribs (fd, B57600, 0);  // set speed to 57,600 bps, 8n1 (no parity)
-	set_blocking (fd, 0);				// set no blocking
+	set_interface_attribs (fd, B57600, 0);  // set speed to 57,600 bps, 8n1 (no parity)
+	//set_blocking (fd, 0);				// set minimum byte to 0 REDUNDANT
 
 	file_descriptor = fd;
 	return 0;
