@@ -41,6 +41,7 @@ ignbrk -brkint -icrnl -imaxbel
 -isig -icanon -iexten -echo noflsh
 
 OR MAYBE
+...Seems redundant, so don't do it unless more unexplained errors
 speed 57600 baud; line = 0;
 intr = <undef>; quit = <undef>; erase = <undef>; kill = <undef>; eof = <undef>; start = <undef>; stop = <undef>; susp = <undef>;
 rprnt = <undef>; werase = <undef>; lnext = <undef>; discard = <undef>; min = 1; time = 0;
