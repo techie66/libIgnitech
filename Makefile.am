@@ -8,7 +8,7 @@ git-clean: distclean
 	rm -fr autom4te.cache
 	rm -f Makefile.in aclocal.m4 compile config.guess config.h.in config.h.in~ config.sub configure depcomp example/.dirstamp example/Makefile.in install-sh ltmain.sh missing
 
-bin_PROGRAMS =  			example/ignitech_example \
+noinst_PROGRAMS =  			example/ignitech_example \
 					example/tcip4_emulator
 EXTRA_PROGRAMS =			example/ignitech_example_dyn
 example_ignitech_example_SOURCES =	example/ignitech.cpp

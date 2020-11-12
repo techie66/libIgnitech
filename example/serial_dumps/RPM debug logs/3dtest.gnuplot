@@ -7,5 +7,7 @@ set xrange [1000:10000]
 set dgrid3d 50,50 gauss 1
 #set dgrid3d 50,50 qnorm 2
 
-splot 'system_log.csv' using 1:10:9 with lines
+splot 'log.csv' using 1:10:9 with lines
 #splot 'system_log.csv' using 1:9:10 with points palette pointsize 3 pointtype 7
+
+pause mouse close

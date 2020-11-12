@@ -10,7 +10,6 @@ set ytics nomirror # dont show the tics on that side
 set y2label "RPM" # label for second axis
 set y2range [0:]
 
-#plot '2020102617.csv' using 9:7 title "Oil Pressure" with lines,'' using 9:1 title "RPM" axis x1y2 with lines, '' using 9:6 title "Oil Temperature", '' using 9:5 title "Battery Voltage", '' using 9:4 title "Switched Voltage", '' using 9:10 title "Lambda" with lines, '' using 9:11 title "IAP(kpa)
-plot '20201030.csv' using 9:1 title "IG" axis x1y1 with lines, '' using 9:2 title "EN" axis x1y1 with lines
-pause 30
-reread
+plot 'log.csv' using 9:7 title "Oil Pressure" with lines,'' using 9:1 title "RPM" axis x1y2 with lines, '' using 9:6 title "Oil Temperature", '' using 9:5 title "Battery Voltage", '' using 9:4 title "Switched Voltage", '' using 9:10 title "Lambda" with lines, '' using 9:11 title "IAP(kpa)
+
+pause mouse close

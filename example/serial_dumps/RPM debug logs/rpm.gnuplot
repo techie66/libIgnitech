@@ -7,6 +7,6 @@ set xtics rotate # rotate labels on the x axis
 
 set ytics nomirror # dont show the tics on that side
 
-plot '20201028.csv' using 9:1 title "IG" axis x1y1 with lines, '' using 9:2 title "EN" axis x1y1 with lines
-pause 30
-reread
+plot 'log.csv' using 9:1 title "IG" axis x1y1 with lines, '' using 9:2 title "EN" axis x1y1 with lines
+
+pause mouse close

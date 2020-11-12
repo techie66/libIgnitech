@@ -6,7 +6,7 @@ AC_INIT([IGNITECH], [0.2], [https://github.com/techie66/libIgnitech/issues])
 AC_CONFIG_SRCDIR([src/ignitech.cpp])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([subdir-objects])
-AM_MAINTAINER_MODE([disable])
+AM_MAINTAINER_MODE([])
 LT_INIT
 
 # Checks for programs.

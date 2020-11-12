@@ -6,7 +6,6 @@ set xtics rotate # rotate labels on the x axis
 #set xrange ["03/30/20 14:47:08":"03/30/20 14:59:58"]
 
 set ytics nomirror # dont show the tics on that side
-
-plot '20201030.csv' using 9:($2/$3) title "IG" axis x1y1 with lines
-pause 30
-reread
+set yrange [50:160]
+plot 'log.csv' using 9:($2/$3) title "IG" axis x1y1 with lines
+pause mouse close 
