@@ -75,17 +75,37 @@ typedef enum IGN_async_status{
 struct ignitech_t{
 	uint16_t	rpm;
 	uint16_t	battery_mV;
+	enum {NONE,TPS,IAP} sensor_type;
 	uint16_t	sensor_mV;
 	uint16_t	sensor_value;
 	uint16_t	programmings;
-	uint16_t	advance_max_1_grad;
-	uint16_t	advance_max_2_grad;
+	uint16_t	advance_max_1_deg;
+	uint16_t	advance_max_2_deg;
+	uint16_t	advance_max_3_deg;
+	uint16_t	advance_max_4_deg;
 	uint16_t	dwell_opt_ms;
 	uint16_t	dwell_ms;
 	uint16_t	runtime_min;
 	uint16_t	message_number;
-	uint8_t	advance_1_grad;
-	uint8_t	advance_2_grad;
+	uint8_t	advance_1_deg;
+	uint8_t	advance_2_deg;
+	uint8_t	advance_3_deg;
+	uint8_t	advance_4_deg;
+	uint16_t	servo_measured;
+	uint16_t	servo_requested;
+	bool	input_kill;
+	bool	input_block;
+	bool	input_quickshift;
+	bool	input_retard;
+	bool	input_start_limiter;
+	bool	input_2nd_chart;
+	bool	input_inverted;
+	bool	output_1_on;
+	bool	output_2_on;
+	bool	output_1_enabled;
+	bool	output_2_enabled;
+	bool	limiter_active;
+
 	uint8_t	flags;
 };
 
