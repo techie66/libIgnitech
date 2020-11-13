@@ -72,12 +72,29 @@ typedef enum IGN_async_status{
 	IGN_AGAIN
 } IGN_async_status;
 
+typedef enum inputtype_t{
+	UNUSED,
+	KILL,
+	BLOCK,
+	QUICKSHIFT,
+	RETARD,
+	START_LIMITER,
+	SECOND_CHART
+} inputtype_t;
+
+typedef enum sensortype_t {
+	NONE,
+	TPS,
+	IAP
+} sensortype_t;
+
 struct ignitech_t{
 	uint16_t	rpm;
 	uint16_t	battery_mV;
-	enum {NONE,TPS,IAP} sensor_type;
+	sensortype_t sensor_type;
 	uint16_t	sensor_mV;
 	uint16_t	sensor_value;
+	bool	sensor_error;
 	uint16_t	programmings;
 	uint16_t	advance_max_1_deg;
 	uint16_t	advance_max_2_deg;
@@ -93,20 +110,49 @@ struct ignitech_t{
 	uint8_t	advance_4_deg;
 	uint16_t	servo_measured;
 	uint16_t	servo_requested;
+	bool	servo_enabled;
+	bool	servo_percent;
+	bool	programmed_data_error;
+	bool	dwell_error;
 	bool	input_kill;
 	bool	input_block;
 	bool	input_quickshift;
 	bool	input_retard;
 	bool	input_start_limiter;
 	bool	input_2nd_chart;
+	bool	input_kill_enabled;
+	bool	input_block_enabled;
+	bool	input_quickshift_enabled;
+	bool	input_retard_enabled;
+	bool	input_start_limiter_enabled;
+	bool	input_2nd_chart_enabled;
 	bool	input_inverted;
+	bool	input1_active;
+	bool	input2_active;
 	bool	output_1_on;
 	bool	output_2_on;
 	bool	output_1_enabled;
 	bool	output_2_enabled;
 	bool	limiter_active;
-
-	uint8_t	flags;
+	bool	start_limiter_ready;
+	bool	pickup1_system_error;
+	bool	pickup1_signal;
+	bool	pickup1_neg_polarity;
+	bool	pickup1_polarity_error;
+	bool	pickup2_system_error;
+	bool	pickup2_signal;
+	bool	pickup2_neg_polarity;
+	bool	pickup2_polarity_error;
+	bool	motor_off;
+	uint16_t	proprietary_monitor_1;
+	uint16_t	proprietary_monitor_2;
+	uint16_t	proprietary_monitor_3;
+	uint16_t	proprietary_monitor_4;
+	uint16_t	proprietary_monitor_5;
+	uint16_t	over_voltage_onboard;
+	inputtype_t input1_type;
+	inputtype_t input2_type;
+	uint8_t	number_cylinders;
 };
 
 class IGNITECH {
@@ -118,6 +164,7 @@ class IGNITECH {
 		int get_rpm();
 		int get_sensor_value();
 		int get_sensor_mV();
+		int get_sensor_type();
 		int get_battery_mV();
 		IGNITECH( char const *file );
 		IGNITECH( int fd );

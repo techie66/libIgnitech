@@ -76,7 +76,9 @@ libtool
 example/virtual-tty
 
 # Check stuff
+test-suite.log
 check/rpm
 check/sensormv
+check/sensor_type
 check/*.log
 check/*.trs

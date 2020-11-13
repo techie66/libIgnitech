@@ -27,8 +27,10 @@ example_dyn:
 	$(MAKE) $(AM_MAKEFLAGS) ignitech_example_dyn
 
 check_PROGRAMS =		check/rpm \
-				check/sensormv
+				check/sensormv \
+				check/sensor_type
 AM_DEFAULT_SOURCE_EXT = .cpp
 LDADD =				src/libignitech.la
 TESTS =				check/rpm.sh \
-				check/sensormv.sh
+				check/sensormv.sh \
+				check/sensor_type.sh

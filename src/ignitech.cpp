@@ -248,30 +248,50 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 			status = IGN_SUC;
 			if ( version == VERSION_V88 ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
+				switch (buf[51]) {
+					case 0:
+						ignitech_data.sensor_type = NONE;
+						break;
+					case 1:
+						ignitech_data.sensor_type = TPS;
+						break;
+					case 2:
+						ignitech_data.sensor_type = IAP;
+						break;
+					default:
+						ignitech_data.sensor_type = IAP;
+				}
 				ignitech_data.sensor_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.battery_mV = buf[6] + buf[7] * 0x100u;
 				ignitech_data.sensor_value = buf[22] + buf[23] *0x100u;
-				// TODO check for fabs() with configure and enable contingently 
-				// TODO this is probably no longer needed git rid of it
-				/*if ( ignitech_data.sensor_value != 0 && fabs( running_map_ratio(ignitech_data) - ignitech_data.sensor_mV/(float)ignitech_data.sensor_value ) > 2 ) {
-					status = IGN_BAD;
-				}*/
 			}
 			if ( version == VERSION_V96 ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
+				switch (buf[100]) {
+					case 0:
+						ignitech_data.sensor_type = NONE;
+						break;
+					case 1:
+						ignitech_data.sensor_type = TPS;
+						break;
+					case 2:
+						ignitech_data.sensor_type = IAP;
+						break;
+					default:
+						ignitech_data.sensor_type = IAP;
+				}
 				ignitech_data.sensor_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.sensor_value = buf[6] + buf[7] *0x100u;
 				ignitech_data.battery_mV = buf[8] + buf[9] * 0x100u;
 				ignitech_data.programmings = buf[14] + buf[15] * 0x100u;
-				ignitech_data.advance_max_1_grad = buf[18] + buf[19] * 0x100u;
-				ignitech_data.advance_max_2_grad = buf[20] + buf[21] * 0x100u;
+				ignitech_data.advance_max_1_deg = buf[18] + buf[19] * 0x100u;
+				ignitech_data.advance_max_2_deg = buf[20] + buf[21] * 0x100u;
 				ignitech_data.dwell_opt_ms = buf[26] + buf[27] * 0x100u;
 				ignitech_data.dwell_ms = buf[28] + buf[29] * 0x100u;
 				ignitech_data.runtime_min = buf[30] + buf[31] * 0x100u;
 				ignitech_data.message_number = buf[50] + buf[51] * 0x100u;
-				ignitech_data.advance_1_grad = buf[105];
-				ignitech_data.advance_2_grad = buf[106];
-				ignitech_data.flags = buf[144];
+				ignitech_data.advance_1_deg = buf[105];
+				ignitech_data.advance_2_deg = buf[106];
 			}
 
 			total_read = 0;
@@ -402,6 +422,13 @@ int IGNITECH::get_sensor_value() {
 */
 int IGNITECH::get_sensor_mV() {
 	return ignition.sensor_mV;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_sensor_type() {
+	return ignition.sensor_type;
 }
 
 /*
