@@ -83,9 +83,9 @@ typedef enum inputtype_t{
 } inputtype_t;
 
 typedef enum sensortype_t {
-	NONE,
-	TPS,
-	IAP
+	SENSOR_NONE,
+	SENSOR_TPS,
+	SENSOR_IAP
 } sensortype_t;
 
 struct ignitech_t{

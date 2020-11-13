@@ -250,16 +250,16 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
 				switch (buf[51]) {
 					case 0:
-						ignitech_data.sensor_type = NONE;
+						ignitech_data.sensor_type = SENSOR_NONE;
 						break;
 					case 1:
-						ignitech_data.sensor_type = TPS;
+						ignitech_data.sensor_type = SENSOR_TPS;
 						break;
 					case 2:
-						ignitech_data.sensor_type = IAP;
+						ignitech_data.sensor_type = SENSOR_IAP;
 						break;
 					default:
-						ignitech_data.sensor_type = IAP;
+						ignitech_data.sensor_type = SENSOR_IAP;
 				}
 				ignitech_data.sensor_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.battery_mV = buf[6] + buf[7] * 0x100u;
@@ -269,16 +269,16 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
 				switch (buf[100]) {
 					case 0:
-						ignitech_data.sensor_type = NONE;
+						ignitech_data.sensor_type = SENSOR_NONE;
 						break;
 					case 1:
-						ignitech_data.sensor_type = TPS;
+						ignitech_data.sensor_type = SENSOR_TPS;
 						break;
 					case 2:
-						ignitech_data.sensor_type = IAP;
+						ignitech_data.sensor_type = SENSOR_IAP;
 						break;
 					default:
-						ignitech_data.sensor_type = IAP;
+						ignitech_data.sensor_type = SENSOR_IAP;
 				}
 				ignitech_data.sensor_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.sensor_value = buf[6] + buf[7] *0x100u;
