@@ -265,6 +265,9 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				ignitech_data.battery_mV = buf[6] + buf[7] * 0x100u;
 				ignitech_data.sensor_value = buf[22] + buf[23] *0x100u;
 				ignitech_data.advance_1_deg = buf[57] - 100;
+				ignitech_data.advance_2_deg = buf[58] - 100;
+				ignitech_data.advance_3_deg = buf[59] - 100;
+				ignitech_data.advance_4_deg = buf[60] - 100;
 			}
 			if ( version == VERSION_V96 ) {
 				ignitech_data.rpm = buf[2] + buf[3] * 0x100u;
@@ -293,6 +296,8 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				ignitech_data.message_number = buf[50] + buf[51] * 0x100u;
 				ignitech_data.advance_1_deg = buf[105] - 100;
 				ignitech_data.advance_2_deg = buf[106] - 100;
+				ignitech_data.advance_3_deg = buf[107] - 100;
+				ignitech_data.advance_4_deg = buf[108] - 100;
 			}
 
 			total_read = 0;
@@ -443,6 +448,27 @@ int IGNITECH::get_battery_mV() {
 	Simple Getter
 */
 int IGNITECH::get_advance1() {
+	return ignition.advance_1_deg;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_advance2() {
+	return ignition.advance_1_deg;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_advance3() {
+	return ignition.advance_1_deg;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_advance4() {
 	return ignition.advance_1_deg;
 }
 

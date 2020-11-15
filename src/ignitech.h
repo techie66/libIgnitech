@@ -167,6 +167,9 @@ class IGNITECH {
 		int get_sensor_type();
 		int get_battery_mV();
 		int get_advance1();
+		int get_advance2();
+		int get_advance3();
+		int get_advance4();
 		IGNITECH( char const *file );
 		IGNITECH( int fd );
 		void enable_debug();

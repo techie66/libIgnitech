@@ -36,6 +36,7 @@ option "sweep"	s "Set parameter to sweep" enum typestr="PARAMETER"
 		"CH2_ADVANCE",
 		"CH3_ADVANCE",
 		"CH4_ADVANCE",
+		"ALL_ADVANCE",
 		"LIMITER",
 		"START_LIMITER",
 		"RETARD",
@@ -77,14 +78,14 @@ PROP3
 PROP4
 	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535
 RESPONSE_NUMBER    Sweeps the response number counter from 0 to 65535
+
 CH1_ADVANCE
-	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
 CH2_ADVANCE
-	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
 CH3_ADVANCE
-	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
 CH4_ADVANCE
+ALL_ADVANCE
 	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
+
 LIMITER          -V88 Only- Toggles RPM Limiter flag on and off
 START_LIMITER    -V88 Only- Toggles Start_Limiter flag on and off 
 RETARD           -V88 Only- Toggles Retard flag on and off

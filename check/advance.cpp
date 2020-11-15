@@ -6,7 +6,7 @@
 
 int main() {
 	printf("Starting to read\n");
-	IGNITECH bike ("advance1-tty");
+	IGNITECH bike ("advance-tty");
 	int read_status;
 	for (int i=0;i<256;i++){
 		read_status = bike.read_sync();
@@ -19,14 +19,18 @@ int main() {
 				printf("Advance1: %d,i: %d\n",bike.get_advance1(),i);
 				return -1;
 			}
-		}
-		if ( i % 16384 == 0 ) {
-			int j = i/16384 * 25;
-			printf("%d%%\n",j);
-		}
-		if ( i % 512 == 0 ) {
-			printf("*");
-			fflush(stdout);
+			if ( bike.get_advance2() != i - 100 ) {
+				printf("Advance2: %d,i: %d\n",bike.get_advance2(),i);
+				return -1;
+			}
+			if ( bike.get_advance3() != i - 100 ) {
+				printf("Advance3: %d,i: %d\n",bike.get_advance3(),i);
+				return -1;
+			}
+			if ( bike.get_advance4() != i - 100 ) {
+				printf("Advance4: %d,i: %d\n",bike.get_advance4(),i);
+				return -1;
+			}
 		}
 	}
 	return 0;

@@ -301,6 +301,12 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 			case sweep_arg_CH4_ADVANCE:
 				packet[60] = lsb;
 				break;
+			case sweep_arg_ALL_ADVANCE:
+				packet[57] = lsb;
+				packet[58] = lsb;
+				packet[59] = lsb;
+				packet[60] = lsb;
+				break;
 			case sweep_arg_LIMITER:
 				packet[61] = lsb % 2;
 				break;
@@ -435,6 +441,12 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 				packet[107] = lsb;
 				break;
 			case sweep_arg_CH4_ADVANCE:
+				packet[108] = lsb;
+				break;
+			case sweep_arg_ALL_ADVANCE:
+				packet[105] = lsb;
+				packet[106] = lsb;
+				packet[107] = lsb;
 				packet[108] = lsb;
 				break;
 			case sweep_arg_NUM_CYLINDERS:
