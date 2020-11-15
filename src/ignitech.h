@@ -104,10 +104,10 @@ struct ignitech_t{
 	uint16_t	dwell_ms;
 	uint16_t	runtime_min;
 	uint16_t	message_number;
-	uint8_t	advance_1_deg;
-	uint8_t	advance_2_deg;
-	uint8_t	advance_3_deg;
-	uint8_t	advance_4_deg;
+	int16_t	advance_1_deg;
+	int16_t	advance_2_deg;
+	int16_t	advance_3_deg;
+	int16_t	advance_4_deg;
 	uint16_t	servo_measured;
 	uint16_t	servo_requested;
 	bool	servo_enabled;
@@ -166,6 +166,7 @@ class IGNITECH {
 		int get_sensor_mV();
 		int get_sensor_type();
 		int get_battery_mV();
+		int get_advance1();
 		IGNITECH( char const *file );
 		IGNITECH( int fd );
 		void enable_debug();

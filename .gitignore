@@ -78,6 +78,10 @@ example/virtual-tty
 # Check stuff
 test-suite.log
 check/rpm
+check/advance1
+check/advance2
+check/advance3
+check/advance4
 check/sensormv
 check/sensor_type
 check/*.log
