@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = src/libignitech.la
 src_libignitech_la_SOURCES = src/ignitech.cpp src/serial.cpp
 include_HEADERS = src/ignitech.h
-src_libignitech_la_LDFLAGS = -version-info 1:0:1
+src_libignitech_la_LDFLAGS = -version-info 2:0:0
 examples:
 	$(MAKE) $(AM_MAKEFLAGS) -C example example
 git-clean: distclean
