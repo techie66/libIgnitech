@@ -94,7 +94,9 @@ noinst_PROGRAMS = example/ignitech_example$(EXEEXT) \
 	example/tcip4_emulator$(EXEEXT)
 EXTRA_PROGRAMS = example/ignitech_example_dyn$(EXEEXT)
 check_PROGRAMS = check/rpm$(EXEEXT) check/sensormv$(EXEEXT) \
-	check/advance$(EXEEXT) check/sensor_type$(EXEEXT)
+	check/sensorval$(EXEEXT) check/advance$(EXEEXT) \
+	check/maxadvance$(EXEEXT) check/battmv$(EXEEXT) \
+	check/sensor_type$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -154,6 +156,14 @@ check_advance_SOURCES = check/advance.cpp
 check_advance_OBJECTS = check/advance.$(OBJEXT)
 check_advance_LDADD = $(LDADD)
 check_advance_DEPENDENCIES = src/libignitech.la
+check_battmv_SOURCES = check/battmv.cpp
+check_battmv_OBJECTS = check/battmv.$(OBJEXT)
+check_battmv_LDADD = $(LDADD)
+check_battmv_DEPENDENCIES = src/libignitech.la
+check_maxadvance_SOURCES = check/maxadvance.cpp
+check_maxadvance_OBJECTS = check/maxadvance.$(OBJEXT)
+check_maxadvance_LDADD = $(LDADD)
+check_maxadvance_DEPENDENCIES = src/libignitech.la
 check_rpm_SOURCES = check/rpm.cpp
 check_rpm_OBJECTS = check/rpm.$(OBJEXT)
 check_rpm_LDADD = $(LDADD)
@@ -166,6 +176,10 @@ check_sensormv_SOURCES = check/sensormv.cpp
 check_sensormv_OBJECTS = check/sensormv.$(OBJEXT)
 check_sensormv_LDADD = $(LDADD)
 check_sensormv_DEPENDENCIES = src/libignitech.la
+check_sensorval_SOURCES = check/sensorval.cpp
+check_sensorval_OBJECTS = check/sensorval.$(OBJEXT)
+check_sensorval_LDADD = $(LDADD)
+check_sensorval_DEPENDENCIES = src/libignitech.la
 am_example_ignitech_example_OBJECTS = example/ignitech.$(OBJEXT)
 example_ignitech_example_OBJECTS =  \
 	$(am_example_ignitech_example_OBJECTS)
@@ -232,12 +246,14 @@ am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 SOURCES = $(src_libignitech_la_SOURCES) check/advance.cpp \
-	check/rpm.cpp check/sensor_type.cpp check/sensormv.cpp \
+	check/battmv.cpp check/maxadvance.cpp check/rpm.cpp \
+	check/sensor_type.cpp check/sensormv.cpp check/sensorval.cpp \
 	$(example_ignitech_example_SOURCES) \
 	$(example_ignitech_example_dyn_SOURCES) \
 	$(example_tcip4_emulator_SOURCES)
 DIST_SOURCES = $(src_libignitech_la_SOURCES) check/advance.cpp \
-	check/rpm.cpp check/sensor_type.cpp check/sensormv.cpp \
+	check/battmv.cpp check/maxadvance.cpp check/rpm.cpp \
+	check/sensor_type.cpp check/sensormv.cpp check/sensorval.cpp \
 	$(example_ignitech_example_SOURCES) \
 	$(example_ignitech_example_dyn_SOURCES) \
 	$(example_tcip4_emulator_SOURCES)
@@ -603,7 +619,10 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 LDADD = src/libignitech.la
 TESTS = check/rpm.sh \
 				check/sensormv.sh \
+				check/sensorval.sh \
 				check/advance.sh \
+				check/maxadvance.sh \
+				check/battmv.sh \
 				check/sensor_type.sh
 
 all: config.h
@@ -735,6 +754,18 @@ check/advance.$(OBJEXT): check/$(am__dirstamp) \
 check/advance$(EXEEXT): $(check_advance_OBJECTS) $(check_advance_DEPENDENCIES) $(EXTRA_check_advance_DEPENDENCIES) check/$(am__dirstamp)
 	@rm -f check/advance$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(check_advance_OBJECTS) $(check_advance_LDADD) $(LIBS)
+check/battmv.$(OBJEXT): check/$(am__dirstamp) \
+	check/$(DEPDIR)/$(am__dirstamp)
+
+check/battmv$(EXEEXT): $(check_battmv_OBJECTS) $(check_battmv_DEPENDENCIES) $(EXTRA_check_battmv_DEPENDENCIES) check/$(am__dirstamp)
+	@rm -f check/battmv$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(check_battmv_OBJECTS) $(check_battmv_LDADD) $(LIBS)
+check/maxadvance.$(OBJEXT): check/$(am__dirstamp) \
+	check/$(DEPDIR)/$(am__dirstamp)
+
+check/maxadvance$(EXEEXT): $(check_maxadvance_OBJECTS) $(check_maxadvance_DEPENDENCIES) $(EXTRA_check_maxadvance_DEPENDENCIES) check/$(am__dirstamp)
+	@rm -f check/maxadvance$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(check_maxadvance_OBJECTS) $(check_maxadvance_LDADD) $(LIBS)
 check/rpm.$(OBJEXT): check/$(am__dirstamp) \
 	check/$(DEPDIR)/$(am__dirstamp)
 
@@ -753,6 +784,12 @@ check/sensormv.$(OBJEXT): check/$(am__dirstamp) \
 check/sensormv$(EXEEXT): $(check_sensormv_OBJECTS) $(check_sensormv_DEPENDENCIES) $(EXTRA_check_sensormv_DEPENDENCIES) check/$(am__dirstamp)
 	@rm -f check/sensormv$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(check_sensormv_OBJECTS) $(check_sensormv_LDADD) $(LIBS)
+check/sensorval.$(OBJEXT): check/$(am__dirstamp) \
+	check/$(DEPDIR)/$(am__dirstamp)
+
+check/sensorval$(EXEEXT): $(check_sensorval_OBJECTS) $(check_sensorval_DEPENDENCIES) $(EXTRA_check_sensorval_DEPENDENCIES) check/$(am__dirstamp)
+	@rm -f check/sensorval$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(check_sensorval_OBJECTS) $(check_sensorval_LDADD) $(LIBS)
 example/$(am__dirstamp):
 	@$(MKDIR_P) example
 	@: > example/$(am__dirstamp)
@@ -791,9 +828,12 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@check/$(DEPDIR)/advance.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@check/$(DEPDIR)/battmv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@check/$(DEPDIR)/maxadvance.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@check/$(DEPDIR)/rpm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@check/$(DEPDIR)/sensor_type.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@check/$(DEPDIR)/sensormv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@check/$(DEPDIR)/sensorval.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@example/$(DEPDIR)/cmdline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@example/$(DEPDIR)/error_handling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@example/$(DEPDIR)/ignitech.Po@am__quote@
@@ -1096,9 +1136,30 @@ check/sensormv.sh.log: check/sensormv.sh
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+check/sensorval.sh.log: check/sensorval.sh
+	@p='check/sensorval.sh'; \
+	b='check/sensorval.sh'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 check/advance.sh.log: check/advance.sh
 	@p='check/advance.sh'; \
 	b='check/advance.sh'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+check/maxadvance.sh.log: check/maxadvance.sh
+	@p='check/maxadvance.sh'; \
+	b='check/maxadvance.sh'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+check/battmv.sh.log: check/battmv.sh
+	@p='check/battmv.sh'; \
+	b='check/battmv.sh'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

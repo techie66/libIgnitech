@@ -79,7 +79,10 @@ example/virtual-tty
 test-suite.log
 check/rpm
 check/advance
+check/maxadvance
+check/sensorval
 check/sensormv
 check/sensor_type
+check/battmv
 check/*.log
 check/*.trs

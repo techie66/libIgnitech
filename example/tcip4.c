@@ -264,6 +264,16 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 				packet[20] = lsb;
 				packet[21] = msb;
 				break;
+			case sweep_arg_ALL_MAXADVANCE:
+				packet[14] = lsb;
+				packet[15] = msb;
+				packet[16] = lsb;
+				packet[17] = msb;
+				packet[18] = lsb;
+				packet[19] = msb;
+				packet[20] = lsb;
+				packet[21] = msb;
+				break;
 			case sweep_arg_SENSOR_VALUE:
 				packet[22] = lsb;
 				packet[23] = msb;
@@ -390,6 +400,16 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 				packet[23] = msb;
 				break;
 			case sweep_arg_CH4_MAXADVANCE:
+				packet[24] = lsb;
+				packet[25] = msb;
+				break;
+			case sweep_arg_ALL_MAXADVANCE:
+				packet[18] = lsb;
+				packet[19] = msb;
+				packet[20] = lsb;
+				packet[21] = msb;
+				packet[22] = lsb;
+				packet[23] = msb;
 				packet[24] = lsb;
 				packet[25] = msb;
 				break;

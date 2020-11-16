@@ -164,12 +164,22 @@ class IGNITECH {
 		int get_rpm();
 		int get_sensor_value();
 		int get_sensor_mV();
-		int get_sensor_type();
+		sensortype_t get_sensor_type();
 		int get_battery_mV();
 		int get_advance1();
 		int get_advance2();
 		int get_advance3();
 		int get_advance4();
+		int get_dwell();
+		int get_dwell_opt();
+		int get_runtime();
+		int get_message_number();
+		int get_programmings();
+		int get_advance1_max();
+		int get_advance2_max();
+		int get_advance3_max();
+		int get_advance4_max();
+
 		IGNITECH( char const *file );
 		IGNITECH( int fd );
 		void enable_debug();

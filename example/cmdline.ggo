@@ -20,10 +20,16 @@ option "sweep"	s "Set parameter to sweep" enum typestr="PARAMETER"
 		"SERVO_MEASURED",
 		"SERVO_REQUESTED",
 		"NUM_CYLINDERS",
+		"CH1_ADVANCE",
+		"CH2_ADVANCE",
+		"CH3_ADVANCE",
+		"CH4_ADVANCE",
+		"ALL_ADVANCE",
 		"CH1_MAXADVANCE",
 		"CH2_MAXADVANCE",
 		"CH3_MAXADVANCE",
 		"CH4_MAXADVANCE",
+		"ALL_MAXADVANCE",
 		"DWELL_OPT",
 		"DWELL",
 		"RUNTIME",
@@ -32,11 +38,6 @@ option "sweep"	s "Set parameter to sweep" enum typestr="PARAMETER"
 		"PROP3",
 		"PROP4",
 		"RESPONSE_NUMBER",
-		"CH1_ADVANCE",
-		"CH2_ADVANCE",
-		"CH3_ADVANCE",
-		"CH4_ADVANCE",
-		"ALL_ADVANCE",
 		"LIMITER",
 		"START_LIMITER",
 		"RETARD",
@@ -62,10 +63,21 @@ PROGRAMMINGS       Sweeps number of programmings from 0 to 65535
 SERVO_MEASURED     Sweeps mV value measured from servo from 0 to 65535
 SERVO_REQUESTED    Sweeps mV value requested from servo from 0 to 65535
 NUM_CYLINDERS    -V96 Only- Sweeps number of cylinders from 0 to 4
-CH1_MAXADVANCE     Sweeps Max Advance for Channel 1 from 0 to 65535
-CH2_MAXADVANCE     Sweeps Max Advance for Channel 2 from 0 to 65535
-CH3_MAXADVANCE     Sweeps Max Advance for Channel 3 from 0 to 65535
-CH4_MAXADVANCE     Sweeps Max Advance for Channel 4 from 0 to 65535
+
+CH1_ADVANCE
+CH2_ADVANCE
+CH3_ADVANCE
+CH4_ADVANCE
+ALL_ADVANCE
+	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
+
+CH1_MAXADVANCE
+CH2_MAXADVANCE
+CH3_MAXADVANCE
+CH4_MAXADVANCE
+ALL_MAXADVANCE
+	Sweeps Max Advance for Channel 4 from 0 to 65535
+
 DWELL_OPT          Sweeps Optimal dwell from 0 to 65535
 DWELL              Sweeps actual dwell from 0 to 65535
 RUNTIME          -V96 Only- Sweeps minutes of runtime from 0 to 65535
@@ -78,14 +90,6 @@ PROP3
 PROP4
 	-V96 Only- Sweeps values of Proprietary monitor from 0 to 65535
 RESPONSE_NUMBER    Sweeps the response number counter from 0 to 65535
-
-CH1_ADVANCE
-CH2_ADVANCE
-CH3_ADVANCE
-CH4_ADVANCE
-ALL_ADVANCE
-	Sweeps actual advance starting with 'Base Advance' then -99 to 35435
-
 LIMITER          -V88 Only- Toggles RPM Limiter flag on and off
 START_LIMITER    -V88 Only- Toggles Start_Limiter flag on and off 
 RETARD           -V88 Only- Toggles Retard flag on and off

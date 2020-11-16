@@ -103,7 +103,6 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 		// Read more than expected, reset
 		if ( DEBUG_IGNITECH ) {
 			perror ( "IGNITECH::read_async: Read more than expected. resetting");
-			printf("Read: (%d) Expected: (%d)\n",total_read,packet_size);
 		}
 		reset();
 		total_read = 0;
@@ -197,7 +196,6 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 						total_read += b_read;
 						if ( DEBUG_IGNITECH ) {
 							perror("IGNITECH::read_async:read after header");
-							printf("Total read %d\n",total_read);
 						}
 					}
 				}
@@ -263,6 +261,10 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				}
 				ignitech_data.sensor_mV = buf[4] + buf[5] * 0x100u;
 				ignitech_data.battery_mV = buf[6] + buf[7] * 0x100u;
+				ignitech_data.advance_max_1_deg = buf[14] + buf[15] * 0x100u;
+				ignitech_data.advance_max_2_deg = buf[16] + buf[17] * 0x100u;
+				ignitech_data.advance_max_3_deg = buf[18] + buf[19] * 0x100u;
+				ignitech_data.advance_max_4_deg = buf[20] + buf[21] * 0x100u;
 				ignitech_data.sensor_value = buf[22] + buf[23] *0x100u;
 				ignitech_data.advance_1_deg = buf[57] - 100;
 				ignitech_data.advance_2_deg = buf[58] - 100;
@@ -290,6 +292,8 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 				ignitech_data.programmings = buf[14] + buf[15] * 0x100u;
 				ignitech_data.advance_max_1_deg = buf[18] + buf[19] * 0x100u;
 				ignitech_data.advance_max_2_deg = buf[20] + buf[21] * 0x100u;
+				ignitech_data.advance_max_3_deg = buf[22] + buf[23] * 0x100u;
+				ignitech_data.advance_max_4_deg = buf[24] + buf[25] * 0x100u;
 				ignitech_data.dwell_opt_ms = buf[26] + buf[27] * 0x100u;
 				ignitech_data.dwell_ms = buf[28] + buf[29] * 0x100u;
 				ignitech_data.runtime_min = buf[30] + buf[31] * 0x100u;
@@ -310,7 +314,6 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 			// Checksum bad or version mismatch
 			if ( DEBUG_IGNITECH ) {
 				perror("IGNITECH::read_async: Checksum or version error. Quitting.");
-				printf("Version expected:%d, bytes expected: %d bytes read: %d\n",version,packet_size,total_read);
 			}
 			reset();
 			total_read = 0;
@@ -433,7 +436,7 @@ int IGNITECH::get_sensor_mV() {
 /*
 	Simple Getter
 */
-int IGNITECH::get_sensor_type() {
+sensortype_t IGNITECH::get_sensor_type() {
 	return ignition.sensor_type;
 }
 
@@ -475,9 +478,73 @@ int IGNITECH::get_advance4() {
 /*
 	Simple Getter
 */
+int IGNITECH::get_advance1_max() {
+	return ignition.advance_max_1_deg;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_advance2_max() {
+	return ignition.advance_max_2_deg;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_advance3_max() {
+	return ignition.advance_max_3_deg;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_advance4_max() {
+	return ignition.advance_max_4_deg;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_dwell() {
+	return ignition.dwell_ms;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_dwell_opt() {
+	return ignition.dwell_opt_ms;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_runtime() {
+	return ignition.runtime_min;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_message_number() {
+	return ignition.message_number;
+}
+
+/*
+	Simple Getter
+*/
+int IGNITECH::get_programmings() {
+	return ignition.programmings;
+}
+
+/*
+	Simple Getter
+*/
 IGN_async_status IGNITECH::get_status() {
 	return status;
 }
+
 void IGNITECH::enable_debug() {
 	DEBUG_IGNITECH = true;
 }
@@ -498,7 +565,7 @@ void IGNITECH::disable_raw_dump() {
 
 /*
 	Verify Checksum
-	Return:
+	@return@
 		true = good
 		false = anything else
 */
@@ -516,7 +583,7 @@ bool IGNITECH::checksum_is_good(unsigned char *buf, int length) {
 
 /*
 	Run checks on packet to determine version
-	return:
+	@return@
 		true: consistent and matches 'version'
 		false: any other result
 */
@@ -539,13 +606,3 @@ bool IGNITECH::packet_version_matches(unsigned char *buf, int length) {
 }
 
 
-/*
-	Keep track of running ratio of map_mV to map_kpa
-	returns ratio
-	######### DEPRECATED #########
-	testing indicates this is not needed, there is bug
-*/
-float IGNITECH::running_map_ratio( ignitech_t& ignitech_data ) {
-	// TODO actually calculate
-	return 41.9;
-}

@@ -28,11 +28,17 @@ example_dyn:
 
 check_PROGRAMS =		check/rpm \
 				check/sensormv \
+				check/sensorval \
 				check/advance \
+				check/maxadvance \
+				check/battmv \
 				check/sensor_type
 AM_DEFAULT_SOURCE_EXT = .cpp
 LDADD =				src/libignitech.la
 TESTS =				check/rpm.sh \
 				check/sensormv.sh \
+				check/sensorval.sh \
 				check/advance.sh \
+				check/maxadvance.sh \
+				check/battmv.sh \
 				check/sensor_type.sh
