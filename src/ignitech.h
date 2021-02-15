@@ -179,6 +179,7 @@ class IGNITECH {
 		int get_advance2_max();
 		int get_advance3_max();
 		int get_advance4_max();
+		int get_servo_measured();
 
 		IGNITECH( char const *file );
 		IGNITECH( int fd );
