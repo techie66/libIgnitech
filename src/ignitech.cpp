@@ -73,10 +73,10 @@ void IGNITECH::reset(bool force) {
 		ignition.input_inverted=false;
 		ignition.input1_active=false;
 		ignition.input2_active=false;
-		ignition.output1_on=false;
-		ignition.output2_on=false;
-		ignition.output1_enabled=false;
-		ignition.output2_enabled=false;
+		ignition.output_1_on=false;
+		ignition.output_2_on=false;
+		ignition.output_1_enabled=false;
+		ignition.output_2_enabled=false;
 		ignition.limiter_active=false;
 		ignition.start_limiter_ready=false;
 		ignition.pickup1_system_error=false;

@@ -1,0 +1,6 @@
+configure linguist-vendored
+config.status linguist-vendored
+config.guess linguist-vendored
+compile linguist-vendored
+depcomp linguist-vendored
+autogen.sh linguist-vendored
