@@ -1,6 +1,6 @@
-configure linguist-vendored
-config.status linguist-vendored
-config.guess linguist-vendored
-compile linguist-vendored
-depcomp linguist-vendored
-autogen.sh linguist-vendored
+# Autoconf / Automake generated files
+* linguist-generated
+src/* linguist-generated=false
+etc/* linguist-generated=false
+bin/* linguist-generated=false
+

@@ -29,6 +29,7 @@ example_dyn:
 check_PROGRAMS =		check/rpm \
 				check/sensormv \
 				check/sensorval \
+				check/servomv \
 				check/advance \
 				check/maxadvance \
 				check/battmv \
@@ -38,6 +39,7 @@ LDADD =				src/libignitech.la
 TESTS =				check/rpm.sh \
 				check/sensormv.sh \
 				check/sensorval.sh \
+				check/servomv.sh \
 				check/advance.sh \
 				check/maxadvance.sh \
 				check/battmv.sh \
