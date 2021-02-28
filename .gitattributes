@@ -3,4 +3,6 @@
 src/* linguist-generated=false
 etc/* linguist-generated=false
 bin/* linguist-generated=false
+example/* linguist-generated=false
+check/* linguist-generated=false
 
