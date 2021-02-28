@@ -111,7 +111,7 @@ struct ignitech_t{
 	uint16_t	servo_measured;
 	uint16_t	servo_requested;
 	bool	servo_enabled;
-	bool	servo_percent;
+	int		servo_percent;
 	bool	programmed_data_error;
 	bool	dwell_error;
 	bool	input_kill;
