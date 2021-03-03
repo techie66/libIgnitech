@@ -5,4 +5,5 @@ etc/* linguist-generated=false
 bin/* linguist-generated=false
 example/* linguist-generated=false
 check/* linguist-generated=false
-
+example/cmdline.c linguist-generated
+example/cmdline.h linguist-generated
