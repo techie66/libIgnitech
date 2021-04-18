@@ -521,21 +521,21 @@ int IGNITECH::get_advance1() {
 	Simple Getter
 */
 int IGNITECH::get_advance2() {
-	return ignition.advance_1_deg;
+	return ignition.advance_2_deg;
 }
 
 /*
 	Simple Getter
 */
 int IGNITECH::get_advance3() {
-	return ignition.advance_1_deg;
+	return ignition.advance_3_deg;
 }
 
 /*
 	Simple Getter
 */
 int IGNITECH::get_advance4() {
-	return ignition.advance_1_deg;
+	return ignition.advance_4_deg;
 }
 
 /*
