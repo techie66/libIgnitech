@@ -134,13 +134,13 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 	static size_t total_read = 0;
 	static size_t packet_size = IGNITECH_PACKET_SIZE_V88;
 
-	if ( time(NULL) > reset_last_read + reset_timeout ) {
-		// No response for timeout, reset
+  errno = 0; // Reset upon entry
+
+	if ( file_descriptor < 0 ) {
+		// Bad file descriptor, reset
 		if ( DEBUG_IGNITECH ) {
-			perror ( "IGNITECH::read_async: No response from controller within timeout. Resetting.");
+			perror ( "IGNITECH::read_async: Device not open. Resetting.");
 		}
-		// TODO it hasn't proved necessary, but it may be a good idea to close the port and reopen
-		reset_last_read = time(NULL);
 		reset();
 		total_read = 0;
 		found_header = false;
@@ -148,11 +148,15 @@ IGN_async_status IGNITECH::read_async (ignitech_t& ignitech_data ) {
 		buf[0] = 0;
 	}
 
-	if ( file_descriptor < 0 ) {
-		// Bad file descriptor, reset
+	if ( time(NULL) > reset_last_read + reset_timeout ) {
+		// No response for timeout, reset
 		if ( DEBUG_IGNITECH ) {
-			perror ( "IGNITECH::read_async: Device not open. Resetting.");
+			perror ( "IGNITECH::read_async: No response from controller within timeout. Resetting.");
 		}
+		// TODO it hasn't proved necessary, but it may be a good idea to close the port and reopen
+		reset_last_read = time(NULL);
+    close(file_descriptor);
+    file_descriptor = -1;
 		reset();
 		total_read = 0;
 		found_header = false;
