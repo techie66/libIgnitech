@@ -11,3 +11,12 @@
 00 BF 00 
 
 ^ that is packet sent to TCIP4 to get current programming info
+ followed by 41-47
+
+on writing a 40 packet is sent and then 7 actual programming packets
+presumably the response to 40 includes firmware version info that
+may influence the format of programming data
+
+emulator will accept programming from software, but it is not saved across runs.
+Any programming will print out any packet that does not match "internal" programming
+and will highlight the changed bytes (excepting the command byte and checksum byte)
