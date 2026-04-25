@@ -6,6 +6,15 @@ Currently supporting the folowing data:
  - RPM
  - Battery Voltage
  - Engine load (the unit sends measured sensor voltage and a converted value from either TPS or MAP)
+ - Servo feedback measurement
+ - 4 channel timing advance
+ - 4 channel maximum timing advance
+For V96 firmware the following is also supported
+ - Number of programmings
+ - Dwell optimal time
+ - Current dwell time
+ - Current engine run time
+ - Packet serial number
 
 Ignitech S.R.O. is not affiliated with this software https://www.ignitech.cz
 
@@ -69,6 +78,7 @@ make uninstall works as expected.
 
 # TODO
 - [ ] API // Not yet stable
+- [ ] Implement all data points that have been reverse engineered
 - [x] Checksum checking
 - [x] Support for v96
 - [x] CLI Example
