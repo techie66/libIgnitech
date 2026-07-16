@@ -23,19 +23,6 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-void print_packet(unsigned char* r_buf, int start, int end, bool* highlights) {
-  // TODO add optional parameter to highlight one byte
-  //printf(ANSI_COLOR_RED     "This text is RED!"     ANSI_COLOR_RESET "\n");
-  for (int i=start;i<=end;i++){
-    if (highlights != NULL && highlights[i] == true) {
-      printf(ANSI_COLOR_GREEN "%02X" ANSI_COLOR_RESET  " ",r_buf[i]);
-    } else {
-      printf("%02X ",r_buf[i]);
-    }
-    if ((i+1)%19 == 0) printf("\n");
-  }
-  printf("\n\n");
-}
 int open_pts(char const* pipename)
 {
 	int pts = posix_openpt(O_RDWR);
@@ -52,6 +39,7 @@ int open_pts(char const* pipename)
 	return pts;
 }
 
+void print_packet(unsigned char* r_buf, int start, int end, bool* highlights);
 unsigned char * next_packet(int version, enum enum_sweep sweep);
 bool compare_buffers(bool* results, const unsigned char* vectA, const unsigned char* vectB, const int length);
 void copy_packet(const unsigned char * src, unsigned char * dst, int length);
@@ -664,16 +652,11 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 				break;
 		}
 
-		unsigned char cs = 0;
-		for ( int i = 0; i < 102 - 1; i++ ) {
-			cs ^= packet[i];
-		}
-		cs ^= 0xFF;
-		packet[101] = cs;
+		packet[101] = calc_checksum(packet,102);
 	}
 	if ( version == 96 ) {
 		if ( counter == 0 ) {
-			for ( int i = 0; i<102;i++) {
+			for ( int i = 0; i<152;i++) {
 				packet[i] = 0x00;
 			}
 			packet[0] = 0xb0;
@@ -822,12 +805,7 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 				break;
 		}
 
-		unsigned char cs = 0;
-		for ( int i = 0; i < 152 - 1; i++ ) {
-			cs ^= packet[i];
-		}
-		cs ^= 0xFF;
-		packet[151] = cs;
+		packet[151] = calc_checksum(packet,152);
 	}
 	counter++;
 	return packet;
@@ -956,3 +934,15 @@ bool compare_buffers(bool* results, const unsigned char* vectA, const unsigned c
   return ret;
 }
 
+void print_packet(unsigned char* r_buf, int start, int end, bool* highlights) {
+  printf("%02X\n00  -  ",r_buf[start]);
+  for (int i=start+1;i<=end;i++){
+    if (highlights != NULL && highlights[i] == true) {
+      printf(ANSI_COLOR_GREEN "%02X" ANSI_COLOR_RESET  " ",r_buf[i]);
+    } else {
+      printf("%02X ",r_buf[i]);
+    }
+    if ((i-start)%8 == 0) printf("\n%02d  -  ", (i/8)); // format into blocks
+  }
+  printf("\n\n");
+}
