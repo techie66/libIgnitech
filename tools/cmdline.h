@@ -9,7 +9,9 @@
 #define CMDLINE_H
 
 /* If we use autoconf.  */
-#include "../config.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <stdio.h> /* for FILE */
 
@@ -29,7 +31,7 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_VERSION
 /** @brief the program version */
-#define CMDLINE_PARSER_VERSION VERSION
+#define CMDLINE_PARSER_VERSION "0.1"
 #endif
 
 enum enum_verbose { verbose__NULL = -1, verbose_arg_NONE = 0, verbose_arg_ERROR, verbose_arg_WARN, verbose_arg_INFO, verbose_arg_DEBUG };
@@ -51,7 +53,7 @@ struct gengetopt_args_info
   char * data_file_orig;	/**< @brief Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored. original value given at command line.  */
   const char *data_file_help; /**< @brief Data file in binary form. File must contain properly sized packets. If this is specified, '--sweep' is ignored. help description.  */
   const char *interactive_help; /**< @brief User input required to change output packet. help description.  */
-  const char *hex_output_help; /**< @brief Output a HEX representation of each packet sent. help description.  */
+  const char *hex_output_help; /**< @brief Output a HEX representation of each packet sent. NOT IMPLEMENTED help description.  */
   unsigned int v_min; /**< @brief Verbose output. Specify multiple times for increasing verbosity.'s minimum occurreces */
   unsigned int v_max; /**< @brief Verbose output. Specify multiple times for increasing verbosity.'s maximum occurreces */
   const char *v_help; /**< @brief Verbose output. Specify multiple times for increasing verbosity. help description.  */
@@ -200,31 +202,6 @@ void cmdline_parser_init (struct gengetopt_args_info *args_info);
  * @param args_info the structure to deallocate
  */
 void cmdline_parser_free (struct gengetopt_args_info *args_info);
-
-/**
- * The config file parser (deprecated version)
- * @param filename the name of the config file
- * @param args_info the structure where option information will be stored
- * @param override whether to override possibly already present options
- * @param initialize whether to initialize the option structure my_args_info
- * @param check_required whether to check that all required options were provided
- * @return 0 if everything went fine, NON 0 if an error took place
- * @deprecated use cmdline_parser_config_file() instead
- */
-int cmdline_parser_configfile (const char *filename,
-  struct gengetopt_args_info *args_info,
-  int override, int initialize, int check_required);
-
-/**
- * The config file parser
- * @param filename the name of the config file
- * @param args_info the structure where option information will be stored
- * @param params additional parameters for the parser
- * @return 0 if everything went fine, NON 0 if an error took place
- */
-int cmdline_parser_config_file (const char *filename,
-  struct gengetopt_args_info *args_info,
-  struct cmdline_parser_params *params);
 
 /**
  * Checks that all the required options were specified

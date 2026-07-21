@@ -343,7 +343,7 @@ unsigned char * next_packet(int version, enum enum_sweep sweep) {
 	}
 	if ( version == 96 ) {
 		if ( counter == 0 ) {
-			for ( int i = 0; i<102;i++) {
+			for ( int i = 0; i<152;i++) {
 				packet[i] = 0x00;
 			}
 			packet[0] = 0xb0;

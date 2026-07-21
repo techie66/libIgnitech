@@ -88,13 +88,16 @@ typedef enum sensortype_t {
 	SENSOR_IAP
 } sensortype_t;
 
+/**
+ * @brief Data structure that holds all data reported by TCIP
+ */
 struct ignitech_t{
 	uint16_t	rpm;
 	uint16_t	battery_mV;
 	sensortype_t sensor_type;
 	uint16_t	sensor_mV;
 	uint16_t	sensor_value;
-	bool	sensor_error;
+	bool	sensor_error; ///< Set true whenever TCIP decides sensor values are not to be trusted.
 	uint16_t	programmings;
 	uint16_t	advance_max_1_deg;
 	uint16_t	advance_max_2_deg;
@@ -155,6 +158,18 @@ struct ignitech_t{
 	uint8_t	number_cylinders;
 };
 
+/** @brief Class for Ignitech TCIP-4.
+ *
+ * This class holds all the functions for interacting with the TCIP-4. 
+ * There are two basic ways to get data out, and each way can be done
+ * as a syncchronous blocking call or asynchrously.
+ * read_sync() / read_async() can be used to poll the device for data, and 
+ * then calls can be made to the various get_*() functions to retrieve
+ * it.
+ * Otherwise, read_sync(  ignitech_t& ignitech_data ) (or the async version)
+ * can be called which will poll the device and dump all the data into 
+ * an ignitech_t structure.
+ */
 class IGNITECH {
 	public:
 		int read_sync( ignitech_t& ignitech_data );

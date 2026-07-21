@@ -27,6 +27,7 @@ C++ compiler
 INSTALL contains modified generic GNU install instructions.
 ```
 	git clone git@github.com:techie66/libIgnitech.git
+    cd libIgnitech
 	./configure
 	make
 	make check
@@ -41,7 +42,7 @@ Sometimes different versions of autotools will complain and cause errors while r
 ### Library installation
 This is made to be a shared library. Normally the install process will take care of properly installing the library so it can be used, but sometimes (ie installation to a non-standard directory) programs will fail to run with an error like "unable to find libignitech.so.0" In that case you may need to do `sudo ldconfig` after `sudo make install`
 
-### Examples
+## Examples
 An example program is made automatically by make. It is located under the 'example' directory.
 An easy way to try it out:
 ```
